@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Hello World｜Aus.Vic.Mel
+        JAVA｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2016/09/21/hello-world/">
+    <link rel="canonical" href="/2016/09/22/JavaSE集合框架整理/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,15 +148,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Hello World</h1>
+                    <h1>JAVA</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2016-09-21
+                          日期 2016-09-22
                          </span>
                     </span>
                     <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#about"
+                           title="about">about</a>
                         
                     </div>
                 </div>
@@ -165,7 +168,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Hello World
+            JAVA
         </span>
     </div>
 </header>
@@ -176,15 +179,39 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+                <h1 id="JavaSE集合框架整理"><a href="#JavaSE集合框架整理" class="headerlink" title="JavaSE集合框架整理"></a>JavaSE集合框架整理</h1><h3 id="Java集合框架结构图"><a href="#Java集合框架结构图" class="headerlink" title="Java集合框架结构图"></a>Java集合框架结构图</h3><p> <img src="image/java_all_collection.png" alt="java_all_collection"></p>
+<p>大体分为<code>Collection</code>和<code>Map</code></p>
+<p>以下源代码基于JDK 8</p>
+<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p><strong>继承自<code>AbstractList&lt;E&gt;</code>，实现了<code>Cloneable</code>、<code>Serializable</code>和<code>RandomAccess</code></strong></p>
+<p>最小增量为10（在Android SDK下为12）</p>
+<p>每次扩容时，容量变为原来的1.5倍</p>
+<p>ArrayList使用一个用<code>transient</code>关键字修饰的<code>Object[]</code>数组来储存具体数据，当其序列化时，按照数组实际长度将数据写入流中（而非将数组直接装入流，这样避免写入数组中的空位，节省内存空间）</p>
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p><strong>继承自<code>AbstractMap&lt;K,V&gt;</code>，实现了<code>Cloneable</code>和<code>Serializable</code></strong></p>
+<p>最小容量为16，最大容量为2^30（1&lt;&lt;30）</p>
+<p>默认装载因子为0.75</p>
+<p>使用一个用<code>transient</code>关键字修饰的<code>Node[]</code>（<code>HashMapEntry[]</code>）数组<code>table</code>来储存数据，<code>doubleCapacity()</code>函数来扩容。（Android SDK）</p>
+<ul>
+<li><code>put()</code>函数先判断<code>value</code>是否为空，然后用<code>key</code>获取<code>index</code>，用循环判断该<code>index</code>下值是否已存在，接着判断目前<code>table</code>容量大小，最后<code>new HashMapEntry(key, value, hash, index)</code>存入。存入时若当前<code>key</code>内已存在值，则将新<code>Entry</code>的<code>next</code>指向老<code>Entry</code></li>
+<li><code>remove()</code>函数，先判断<code>key</code>是否为空，然后用<code>key</code>获取<code>index</code>，然后按照删除单向链表的的思路删除整个<code>Entry</code>链</li>
+</ul>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><h4 id="HashMapEntry（Android-SDK）"><a href="#HashMapEntry（Android-SDK）" class="headerlink" title="//HashMapEntry（Android-SDK）"></a>//HashMapEntry（Android-SDK）</h4><p>类似一个指针，参数有<code>K key</code>、<code>V value</code>、<code>final int hash</code>与<code>HashMapEntry&lt;K,V&gt; next</code></p>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p><strong>继承自<code>AbstractSequentialList</code>，实现了<code>List&lt;E&gt;</code>，<code>Deque&lt;E&gt;</code>，<code>Queue&lt;E&gt;</code>，<code>Cloneable</code>、<code>Serializable</code></strong></p>
+<p>类似于双向链表，用内部类<code>Link</code>来存放实例与前后对象的引用，</p>
+<p>//<code>voidLink</code>存放首节点。（Android SDK）</p>
+<p>有<code>first</code>和<code>last</code>来存放首尾节点</p>
+<p>执行<code>clear()</code>操作时，直接让首节点指向自己，其他部分等待GC回收</p>
+<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><p>有首尾节点的链表，存入的<code>&lt;K,V&gt;</code>按顺序存入读取。同时每一个<code>Node</code>都有对上一个元素<code>before</code>和下一个元素<code>after</code>的引用</p>
+<p>可以实现LRU</p>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p><strong>继承自<code>AbstractSet</code>，实现了<code>Set&lt;E&gt;</code>、<code>Cloneable</code>和<code>Serializable</code></strong></p>
+<p>内部用<code>HashMap</code>实现，将存入的<code>Object</code>作为key存入</p>
+<h3 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h3><p><strong>继承自<code>Dictionary</code>，实现了<code>Map&lt;K,V&gt;</code>、<code>Cloneable</code>、<code>Serializable</code></strong></p>
+<p>最小容量为16，最大容量为2^30，空的HashMap容量为2</p>
+<p>默认装载因子为0.75</p>
+<p>与<code>HashMap</code>最大的不同点在于不少方法加上了<code>Synchronized</code>关键字，其余均类似</p>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>默认容量16</p>
+<p>结构中包含默认容量的<code>Segment</code>（<code>Segment</code>继承了<code>ReentrantLock</code>），每个<code>Segment</code>又包含若干个散列表的<code>bucket</code>，每个<code>bucket</code>维护一个<code>HashEntry</code>链表</p>
+<p>仅对<code>put()</code>中对<code>Node</code>的操作加锁，使程序可以并发访问多个<code>Segment</code>，而<code>HashEntry</code>中对<code>value</code>和<code>next</code>加了<code>volitale</code>关键字，使其在整个内存中可见</p>
+<h3 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h3><p>HashMap中的<code>Entry&lt;K,V&gt;</code>继承了<code>WeakReference&lt;V&gt;</code></p>
 
                 <hr>
                 
@@ -192,10 +219,15 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/09/22/JavaSE集合框架整理/" data-toggle="tooltip" data-placement="top"
-                           title="JAVA">&larr; Previous Post</a>
+                        <a href="/2016/09/22/test/" data-toggle="tooltip" data-placement="top"
+                           title="test">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2016/09/21/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -207,7 +239,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaSE集合框架整理"><span class="toc-text">JavaSE集合框架整理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java集合框架结构图"><span class="toc-text">Java集合框架结构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList"><span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashMap"><span class="toc-text">HashMap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Node"><span class="toc-text">Node</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMapEntry（Android-SDK）"><span class="toc-text">//HashMapEntry（Android-SDK）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-text">LinkedList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashMap"><span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashSet"><span class="toc-text">HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashTable"><span class="toc-text">HashTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ConcurrentHashMap"><span class="toc-text">ConcurrentHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WeakHashMap"><span class="toc-text">WeakHashMap</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -228,6 +260,9 @@
                         <a href="/tags/">FEATURED TAGS</a>
                     </h5>
                     <div class="tags">
+                        
+                        <a class="tag" href="/tags/#about"
+                           title="about">about</a>
                         
                     </div>
                 </section>
