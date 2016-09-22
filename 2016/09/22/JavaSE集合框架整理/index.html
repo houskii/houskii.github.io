@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        JAVA｜Aus.Vic.Mel
+        JavaSE集合框架整理｜Aus.Vic.Mel
         
     </title>
 
@@ -79,13 +79,19 @@
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/技术/">技术</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/技术/">技术</a>
+                            <a href="/杂谈/">杂谈</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
@@ -148,7 +154,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>JAVA</h1>
+                    <h1>JavaSE集合框架整理</h1>
                     
                     <span class="meta">
                          作者 Houskii
@@ -158,8 +164,8 @@
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#about"
-                           title="about">about</a>
+                        <a class="tag" href="/tags/#技术"
+                           title="技术">技术</a>
                         
                     </div>
                 </div>
@@ -168,7 +174,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            JAVA
+            JavaSE集合框架整理
         </span>
     </div>
 </header>
@@ -179,7 +185,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="JavaSE集合框架整理"><a href="#JavaSE集合框架整理" class="headerlink" title="JavaSE集合框架整理"></a>JavaSE集合框架整理</h1><h3 id="Java集合框架结构图"><a href="#Java集合框架结构图" class="headerlink" title="Java集合框架结构图"></a>Java集合框架结构图</h3><p> <img src="image/java_all_collection.png" alt="java_all_collection"></p>
+                <h1 id="JavaSE集合框架整理"><a href="#JavaSE集合框架整理" class="headerlink" title="JavaSE集合框架整理"></a>JavaSE集合框架整理</h1><h3 id="Java集合框架结构图"><a href="#Java集合框架结构图" class="headerlink" title="Java集合框架结构图"></a>Java集合框架结构图</h3><p> <img src="/images/java_all_collection.png" alt="java_all_collection"></p>
 <p>大体分为<code>Collection</code>和<code>Map</code></p>
 <p>以下源代码基于JDK 8</p>
 <h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p><strong>继承自<code>AbstractList&lt;E&gt;</code>，实现了<code>Cloneable</code>、<code>Serializable</code>和<code>RandomAccess</code></strong></p>
@@ -211,17 +217,12 @@
 <h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>默认容量16</p>
 <p>结构中包含默认容量的<code>Segment</code>（<code>Segment</code>继承了<code>ReentrantLock</code>），每个<code>Segment</code>又包含若干个散列表的<code>bucket</code>，每个<code>bucket</code>维护一个<code>HashEntry</code>链表</p>
 <p>仅对<code>put()</code>中对<code>Node</code>的操作加锁，使程序可以并发访问多个<code>Segment</code>，而<code>HashEntry</code>中对<code>value</code>和<code>next</code>加了<code>volitale</code>关键字，使其在整个内存中可见</p>
-<h3 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h3><p>HashMap中的<code>Entry&lt;K,V&gt;</code>继承了<code>WeakReference&lt;V&gt;</code></p>
+<h3 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h3><p>HashMap中的<code>Entry&lt;K,V&gt;</code>继承了`WeakReference<v>``</v></p>
 
                 <hr>
                 
 
                 <ul class="pager">
-                    
-                    <li class="previous">
-                        <a href="/2016/09/22/test/" data-toggle="tooltip" data-placement="top"
-                           title="test">&larr; Previous Post</a>
-                    </li>
                     
                     
                     <li class="next">
@@ -261,8 +262,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#about"
-                           title="about">about</a>
+                        <a class="tag" href="/tags/#技术"
+                           title="技术">技术</a>
                         
                     </div>
                 </section>
