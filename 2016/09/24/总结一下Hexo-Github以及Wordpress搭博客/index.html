@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        JavaSE集合框架整理｜Aus.Vic.Mel
+        总结一下Hexo+Github以及Wordpress搭博客｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2016/09/22/JavaSE集合框架整理/">
+    <link rel="canonical" href="/2016/09/24/总结一下Hexo-Github以及Wordpress搭博客/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,21 +148,21 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>JavaSE集合框架整理</h1>
+                    <h1>总结一下Hexo+Github以及Wordpress搭博客</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2016-09-22
+                          日期 2016-09-24
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#JAVA"
-                           title="JAVA">JAVA</a>
-                        
                         <a class="tag" href="/tags/#技术"
                            title="技术">技术</a>
+                        
+                        <a class="tag" href="/tags/#兴趣"
+                           title="兴趣">兴趣</a>
                         
                     </div>
                 </div>
@@ -171,7 +171,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            JavaSE集合框架整理
+            总结一下Hexo+Github以及Wordpress搭博客
         </span>
     </div>
 </header>
@@ -182,54 +182,45 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="JavaSE集合框架整理"><a href="#JavaSE集合框架整理" class="headerlink" title="JavaSE集合框架整理"></a>JavaSE集合框架整理</h1><h3 id="Java集合框架结构图"><a href="#Java集合框架结构图" class="headerlink" title="Java集合框架结构图"></a>Java集合框架结构图</h3><p> <img src="/images/java_all_collection.png" alt="java_all_collection"></p>
-<p>大体分为<code>Collection</code>和<code>Map</code></p>
-<p>以下源代码基于JDK 8</p>
-<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p><strong>继承自<code>AbstractList&lt;E&gt;</code>，实现了<code>Cloneable</code>、<code>Serializable</code>和<code>RandomAccess</code></strong></p>
-<p>最小增量为10（在Android SDK下为12）</p>
-<p>每次扩容时，容量变为原来的1.5倍</p>
-<p>ArrayList使用一个用<code>transient</code>关键字修饰的<code>Object[]</code>数组来储存具体数据，当其序列化时，按照数组实际长度将数据写入流中（而非将数组直接装入流，这样避免写入数组中的空位，节省内存空间）</p>
-<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p><strong>继承自<code>AbstractMap&lt;K,V&gt;</code>，实现了<code>Cloneable</code>和<code>Serializable</code></strong></p>
-<p>最小容量为16，最大容量为2^30（1&lt;&lt;30）</p>
-<p>默认装载因子为0.75</p>
-<p>使用一个用<code>transient</code>关键字修饰的<code>Node[]</code>（<code>HashMapEntry[]</code>）数组<code>table</code>来储存数据，<code>doubleCapacity()</code>函数来扩容。（Android SDK）</p>
+                <h1 id="用Hexo-Wordpress搭博客总结"><a href="#用Hexo-Wordpress搭博客总结" class="headerlink" title="用Hexo/Wordpress搭博客总结"></a>用Hexo/Wordpress搭博客总结</h1><p>目前对于非前端来说，搭Blog的主流方式是用网上现成的框架，主流的有Hexo以及Wordpress，刚好这周我把这两个框架都简单尝试了一下，在此做一下小小的总结</p>
+<h2 id="Wordpress"><a href="#Wordpress" class="headerlink" title="Wordpress"></a>Wordpress</h2><p>后端使用php，有后台管理，文章存在数据库里。要搭Wordpress首先要自己的服务器，这里我用的是腾讯云，系统为CentOS 64位。</p>
+<p>先配置httpd/php/mysql/lrzsz的环境，然后启动这3个服务</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">yum install httpd</div><div class="line">yum install php php-mysql php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-mcrypt php-bcmath php-mhash</div><div class="line">yum install lrzsz</div><div class="line">yum install mariaDB</div><div class="line"></div><div class="line">service httpd start</div><div class="line">service php-fpm start</div><div class="line">service mariaDB start</div></pre></td></tr></table></figure>
+<blockquote>
+<p>用yum安装时由于历史原因（mysql被oracle收购后有闭源的风险），所以install mysql是装不了的……换成install mariaDB，但还是可以通过mysql来访问</p>
+</blockquote>
+<p>然后访问mysql并创建账号以及一个数据库</p>
+<p>接着到<a href="http://cn.wordpress.org/" target="_blank" rel="external">workpress</a>下载tar.gz的包，然后用shell <code>cd</code> 到<code>/var/www/html/wordpress</code>目录中，用<code>rz</code>或者ftp5上传这个压缩包，接着用<code>tar -zxvf [filename]</code>解压这个包</p>
+<p>输入<code>vi wp-config-sample.php</code>，修改以下信息<img src="http://shp.qpic.cn/txdiscuz_pic/0/_bbs_qcloud_com_forum_201407_02_151219hpt5ed68l8phltb8.jpeg/0" alt="修改">并rename为<code>wp-config.php</code></p>
+<p>这时候访问<u><a href="http://服务器公网ip/wordpress" target="_blank" rel="external">http://服务器公网ip/wordpress</a></u>进行设置就Ok了</p>
+<p>——————————————以上是基本设置——————————————————</p>
+<p>在设置完wordpress基本属性后，你会发现默认theme并不好看，可以在网上下载主题然后扔到/var/www/html/wordpress/wp-themes/文件夹下，就可以在wp的管理界面下找到这个主题。</p>
+<p>但是当你想要下载插件的时候，你会被要求输入主机ip/账户/密码，当时我输了好久都给我提示不对，最后才发现对插件的设置是要求启用ftp的……于是还要去给服务器装vsftpd，这玩意的设置可以自行google……账号密码也是ftp的账号密码</p>
+<p>但是输入以后还可能装不了插件，找了半天log发现是权限不够的问题，本着懒的心态，可以直接<code>sudo chmod -R 777 /var/www/html/wordpress</code>给所有用户组读写执行的权限……</p>
+<p>这里其实对wordpress的设置就差不多了，但是我还是不太满意，因为这玩意发表文章实在是太麻烦了，必须要登陆后台管理界面去写，虽然可以用邮件但是我测试了半天并不能成功……这时候寝室前端大神跑过来：“辣鸡框架后端还用php” _(:з」∠)__ 看了一下确实很捉急，我这个写Android的看了半天别人theme的代码，想改都不知道怎么改……</p>
+<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>大神推荐的框架，后端算是Node.js。网上的教程蛮多的，大多都是和Github page一起用的</p>
+<p>先安装node.js，然后<code>npm install hexo-cli</code>、<code>npm install hexo</code>，基本上就搞定了，运行<code>hexo init</code>直接在当前文件夹下创建一个hexo的基本页，然后输入<code>hexo g</code>或<code>hexo generate</code>静态化页面，<code>hexo s</code>或者<code>hexo server</code>启动本地服务器就可以在localhost:4000看到了，绑定了github以后通过<code>hexo d</code>或者<code>hexo deploy</code>把页面发到github上就完成了。</p>
+<p>页面/主题等设置通过<code>_config.xml</code>文件修改，文章通过hexo new “[filename]”来创建，默认为md格式</p>
+<p>说一下碰到的几个坑</p>
 <ul>
-<li><code>put()</code>函数先判断<code>value</code>是否为空，然后用<code>key</code>获取<code>index</code>，用循环判断该<code>index</code>下值是否已存在，接着判断目前<code>table</code>容量大小，最后<code>new HashMapEntry(key, value, hash, index)</code>存入。存入时若当前<code>key</code>内已存在值，则将新<code>Entry</code>的<code>next</code>指向老<code>Entry</code></li>
-<li><code>remove()</code>函数，先判断<code>key</code>是否为空，然后用<code>key</code>获取<code>index</code>，然后按照删除单向链表的的思路删除整个<code>Entry</code>链</li>
+<li><code>hexo</code>指令都要在<code>init</code>后的文件夹里执行，不然是没效果的</li>
+<li>每次执行都报错<code>Error: Cannot find module &#39;./build/Release/DTraceProviderBindings&#39;...</code>，其实这玩意可以不理，当然网上也就解决办法，比如<code>uninstall</code>后再<code>install</code>hexo-cli和hexo，以及<code>install</code>hexp的时候加上<code>--optional--no</code>，然而我试过了都没效果。最后通过<code>npm uninstall dtrace-provider</code>这个组件解决（但是编译的时候依然有错）</li>
+<li>执行<code>hexo g</code>之前最好执行一次<code>hexo clean</code>清除一下上次编译留下来的数据，但是<code>hexo clean</code>会直接删除目录下编译成功的<code>public</code>文件夹。如果涉及到个人域名解析，需要在工程中添加CNAME文件，而<code>hexo d</code>是默认上传<code>public</code>文件夹内所有内容的，所以每次<code>clean</code>之后记得把<code>CNAME</code>放进去</li>
 </ul>
-<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><h4 id="HashMapEntry（Android-SDK）"><a href="#HashMapEntry（Android-SDK）" class="headerlink" title="//HashMapEntry（Android-SDK）"></a>//HashMapEntry（Android-SDK）</h4><p>类似一个指针，参数有<code>K key</code>、<code>V value</code>、<code>final int hash</code>与<code>HashMapEntry&lt;K,V&gt; next</code></p>
-<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p><strong>继承自<code>AbstractSequentialList</code>，实现了<code>List&lt;E&gt;</code>，<code>Deque&lt;E&gt;</code>，<code>Queue&lt;E&gt;</code>，<code>Cloneable</code>、<code>Serializable</code></strong></p>
-<p>类似于双向链表，用内部类<code>Link</code>来存放实例与前后对象的引用，</p>
-<p>//<code>voidLink</code>存放首节点。（Android SDK）</p>
-<p>有<code>first</code>和<code>last</code>来存放首尾节点</p>
-<p>执行<code>clear()</code>操作时，直接让首节点指向自己，其他部分等待GC回收</p>
-<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><p>有首尾节点的链表，存入的<code>&lt;K,V&gt;</code>按顺序存入读取。同时每一个<code>Node</code>都有对上一个元素<code>before</code>和下一个元素<code>after</code>的引用</p>
-<p>可以实现LRU</p>
-<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p><strong>继承自<code>AbstractSet</code>，实现了<code>Set&lt;E&gt;</code>、<code>Cloneable</code>和<code>Serializable</code></strong></p>
-<p>内部用<code>HashMap</code>实现，将存入的<code>Object</code>作为key存入</p>
-<h3 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h3><p><strong>继承自<code>Dictionary</code>，实现了<code>Map&lt;K,V&gt;</code>、<code>Cloneable</code>、<code>Serializable</code></strong></p>
-<p>最小容量为16，最大容量为2^30，空的HashMap容量为2</p>
-<p>默认装载因子为0.75</p>
-<p>与<code>HashMap</code>最大的不同点在于不少方法加上了<code>Synchronized</code>关键字，其余均类似</p>
-<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>默认容量16</p>
-<p>结构中包含默认容量的<code>Segment</code>（<code>Segment</code>继承了<code>ReentrantLock</code>），每个<code>Segment</code>又包含若干个散列表的<code>bucket</code>，每个<code>bucket</code>维护一个<code>HashEntry</code>链表</p>
-<p>仅对<code>put()</code>中对<code>Node</code>的操作加锁，使程序可以并发访问多个<code>Segment</code>，而<code>HashEntry</code>中对<code>value</code>和<code>next</code>加了<code>volitale</code>关键字，使其在整个内存中可见</p>
-<h3 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h3><p>HashMap中的<code>Entry&lt;K,V&gt;</code>继承了`WeakReference<v>``</v></p>
+<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><p>如果购买了腾讯云的学生套餐是会送一个域名的，想把这个域名和github pages绑定的话，首先要在yourname.github.io这个项目下创建一个CNAME文件，文件里填写你自己的域名（比如我填了houskii.cn），这时候访问yourname.github.io就会自动转跳到你填的地址</p>
+<p>此时还要记得设置域名的解析，添加一个A地址，ip输入151.101.16.133（151.101.16.134），开启解析就OK了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一下，Hexo好处在于天然支持md，纯前端，可以在本地server测试了以后再发布，缺点就是页面是静态的，也就是说哪怕只改一个字也要走generate-&gt;deploy这个流程</p>
+<p>Wordpress好处在于用数据库管理，同时有一套后台界面，缺点是相比于Hexo笨重不少……</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2016/09/24/总结一下Hexo-Github以及Wordpress搭博客/" data-toggle="tooltip" data-placement="top"
-                           title="总结一下Hexo+Github以及Wordpress搭博客">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2016/09/21/hello-world/" data-toggle="tooltip" data-placement="top"
-                           title="Hello World">Next Post &rarr;</a>
+                        <a href="/2016/09/22/JavaSE集合框架整理/" data-toggle="tooltip" data-placement="top"
+                           title="JavaSE集合框架整理">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -242,7 +233,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaSE集合框架整理"><span class="toc-text">JavaSE集合框架整理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java集合框架结构图"><span class="toc-text">Java集合框架结构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList"><span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashMap"><span class="toc-text">HashMap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Node"><span class="toc-text">Node</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMapEntry（Android-SDK）"><span class="toc-text">//HashMapEntry（Android-SDK）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-text">LinkedList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashMap"><span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashSet"><span class="toc-text">HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashTable"><span class="toc-text">HashTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ConcurrentHashMap"><span class="toc-text">ConcurrentHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WeakHashMap"><span class="toc-text">WeakHashMap</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用Hexo-Wordpress搭博客总结"><span class="toc-text">用Hexo/Wordpress搭博客总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Wordpress"><span class="toc-text">Wordpress</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo"><span class="toc-text">Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#域名解析"><span class="toc-text">域名解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -264,11 +255,11 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#JAVA"
-                           title="JAVA">JAVA</a>
-                        
                         <a class="tag" href="/tags/#技术"
                            title="技术">技术</a>
+                        
+                        <a class="tag" href="/tags/#兴趣"
+                           title="兴趣">兴趣</a>
                         
                     </div>
                 </section>
