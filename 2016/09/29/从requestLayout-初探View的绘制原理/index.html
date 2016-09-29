@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        从requestLayout()初探View的绘制原理｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2016/09/29/从requestLayout-初探View的绘制原理/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>从requestLayout()初探View的绘制原理</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2016-09-29
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            从requestLayout()初探View的绘制原理
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="从requestLayout-初探View的绘制原理"><a href="#从requestLayout-初探View的绘制原理" class="headerlink" title="从requestLayout()初探View的绘制原理"></a>从requestLayout()初探View的绘制原理</h2><p>在自定义View时，涉及到View的大小变化时，通常会涉及到一个函数<code>requestLayout()</code>，字面意思大家都知道是要求重新执行View的绘制中的layout，但是<code>requestLayout()</code>是如何做到让View重新绘制的呢？只是简单调用本身的<code>layout(...)</code>方法么？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void requestLayout() &#123;</div><div class="line">    ...</div><div class="line">    if (mParent != null &amp;&amp; !mParent.isLayoutRequested()) &#123;</div><div class="line">        mParent.requestLayout();</div><div class="line">    &#125;</div><div class="line">    ....</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，<code>View</code>类的<code>requestLayout()</code>是调用<code>ViewParent</code>的<code>requestLayout()</code>方法，但是<code>ViewParent</code>类只是一个接口没有实现，所以我们去找<code>mParent</code>的引用。</p>
+<p>我们逐级打印出<code>mParent</code>，会发现最后指向了<code>PhoneWindow$DecorView</code>，也就是我们常说的根View。但是再看下去，发现<code>DecorView</code>其实是<code>FrameLayout</code>的子类，也就是说又指回了<code>View</code>，这下似乎陷入了循环……</p>
+<p>而<code>mParent</code>也只有在<code>assignParent</code>方法中实现了赋值，但<code>View</code>类本身并没有调用这个方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">void assignParent(ViewParent parent) &#123;</div><div class="line">        if (mParent == null) &#123;</div><div class="line">            mParent = parent;</div><div class="line">        &#125; else if (parent == null) &#123;</div><div class="line">            mParent = null;</div><div class="line">        &#125; else &#123;</div><div class="line">            throw new RuntimeException(&quot;view &quot; + this + &quot; being added, but&quot;</div><div class="line">                    + &quot; it already has a parent&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>那么我们只能从<code>DecorView</code>生成的地方来考虑了，众所周知<code>DecorView</code>作为Activity的根View，那么肯定和Activity生成的地方有关。我们从Activity的创建开始找，最后在<code>ActivityThread</code>类中的<code>handleResumeActivity()</code>方法中，找到对Activity中<code>DecorView</code>的赋值</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">final void handleResumeActivity(IBinder token, boolean clearHide, boolean isForward, boolean reallyResume) &#123;</div><div class="line">       ...</div><div class="line">       if (r.window == null &amp;&amp; !a.mFinished &amp;&amp; willBeVisible) &#123;</div><div class="line">               r.window = r.activity.getWindow();</div><div class="line">               View decor = r.window.getDecorView();</div><div class="line">               decor.setVisibility(View.INVISIBLE);</div><div class="line">               ViewManager wm = a.getWindowManager();</div><div class="line">               WindowManager.LayoutParams l = r.window.getAttributes();</div><div class="line">               a.mDecor = decor;</div><div class="line">               l.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;</div><div class="line">               l.softInputMode |= forwardBit;</div><div class="line">               if (a.mVisibleFromClient) &#123;</div><div class="line">                   a.mWindowAdded = true;</div><div class="line">                   wm.addView(decor, l);</div><div class="line">               &#125;</div><div class="line"></div><div class="line">           // If the window has already been added, but during resume</div><div class="line">           // we started another activity, then don&apos;t yet make the</div><div class="line">           // window visible.</div><div class="line">           &#125;</div><div class="line">       ...</div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p><code>getDecorView()</code>是<code>Window</code>类下的一个抽象方法，而Android中实现了<code>Window</code>的类只有<code>PhoneWindow</code>，于是我们去<code>PhoneWindow</code>中找</p>
+<blockquote>
+<p>这里说明一点，<code>mDecor</code>的创建时间并不是调用<code>getDecorView()</code>时，而是<code>Activity</code>的<code>onCreate</code>方法，因为<code>ActivityThread</code>先调用了<code>performLaunchActivity</code>方法创建了activity并执行<code>onCreate</code>方法，而<code>onCreate</code>方法中的<code>setContentView</code>会调用<code>PhoneWindow</code>的<code>setContentView</code>方法，这里最先执行了<code>installDecor()</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">    public final View getDecorView() &#123;</div><div class="line">        if (mDecor == null) &#123;</div><div class="line">            installDecor();</div><div class="line">        &#125;</div><div class="line">        return mDecor;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">   private void installDecor() &#123;</div><div class="line">        if (mDecor == null) &#123;</div><div class="line">            mDecor = generateDecor();</div><div class="line">            mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);</div><div class="line">            mDecor.setIsRootNamespace(true);</div><div class="line">            if (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != 0) &#123;</div><div class="line">                mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">  protected DecorView generateDecor() &#123;</div><div class="line">        return new DecorView(getContext(), -1);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p> 好像还是没有线索……但是我们发现在<code>handleResumeActivity</code>方法中<code>DecorView</code>的实例最后被一个<code>ViewManager</code>的子类<code>WindowManager</code>通过<code>addView()</code>添加进去了，会不会跟这个WindowManager有关系呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">//handleResumeActivity中指向的方法，在Activity.java中</div><div class="line">public WindowManager getWindowManager() &#123;</div><div class="line">        return mWindowManager;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>指向了Activity中的一个变量<code>mWindowManager</code>，其在<code>Activity</code>的<code>attach</code>方法中被初始化</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">final void attach(Context context, ActivityThread aThread,</div><div class="line">            Instrumentation instr, IBinder token, int ident,</div><div class="line">            Application application, Intent intent, ActivityInfo info,</div><div class="line">            CharSequence title, Activity parent, String id,</div><div class="line">            NonConfigurationInstances lastNonConfigurationInstances,</div><div class="line">            Configuration config, String referrer, IVoiceInteractor voiceInteractor) &#123;</div><div class="line">            ...</div><div class="line">            mWindowManager = mWindow.getWindowManager();</div><div class="line">            ...</div><div class="line">           &#125;</div></pre></td></tr></table></figure>
+<p>调用到<code>Window</code>类中的方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">/**</div><div class="line">     * Return the window manager allowing this Window to display its own</div><div class="line">     * windows.</div><div class="line">     *</div><div class="line">     * @return WindowManager The ViewManager.</div><div class="line">     */</div><div class="line">    public WindowManager getWindowManager() &#123;</div><div class="line">        return mWindowManager;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>再去找<code>mWindowManager</code>赋值的地方</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void setWindowManager(WindowManager wm, IBinder appToken, String appName,</div><div class="line">           boolean hardwareAccelerated) &#123;</div><div class="line">       if (wm == null) &#123;</div><div class="line">           wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);</div><div class="line">       &#125;</div><div class="line">       mWindowManager = ((WindowManagerImpl)wm).createLocalWindowManager(this);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>终于发现了一个不一样的类<code>WindowManagerImpl</code>，这应该就是实现了<code>WindowManager</code>接口的类，看下它的<code>addView()</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">    public void addView(@NonNull View view, @NonNull ViewGroup.LayoutParams params) &#123;</div><div class="line">        applyDefaultToken(params);</div><div class="line">        mGlobal.addView(view, params, mDisplay, mParentWindow);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>又扔给了一个<code>mGlobal</code>变量，这个变量属于<code>WindowManagerGlobal</code>类，可以看下这个类的介绍</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">**</div><div class="line"> * Provides low-level communication with the system window manager for</div><div class="line"> * operations that are not associated with any particular context.</div><div class="line"> *</div><div class="line"> * This class is only used internally to implement global functions where</div><div class="line"> * the caller already knows the display and relevant compatibility information</div><div class="line"> * for the operation.  For most purposes, you should use &#123;@link WindowManager&#125; instead</div><div class="line"> * since it is bound to a context.</div></pre></td></tr></table></figure>
+<p>呃……英文不好自行找词典，大概意思就是提供了一个全局变量来实现底层系统与表现层的沟通，再来看他的<code>addView()</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void addView(View view, ViewGroup.LayoutParams params,Display display, Window parentWindow) &#123;</div><div class="line">         ViewRootImpl root;</div><div class="line">         synchronized (mLock) &#123;</div><div class="line">            root = new ViewRootImpl(view.getContext(), display);</div><div class="line"></div><div class="line">            view.setLayoutParams(wparams);</div><div class="line"></div><div class="line">            mViews.add(view);</div><div class="line">            mRoots.add(root);</div><div class="line">            mParams.add(wparams);</div><div class="line">        try &#123;</div><div class="line">            root.setView(view, wparams, panelParentView);</div><div class="line">        &#125; catch (RuntimeException e) &#123;</div><div class="line">            // BadTokenException or InvalidDisplayException, clean up.</div><div class="line">            synchronized (mLock) &#123;</div><div class="line">                final int index = findViewLocked(view, false);</div><div class="line">                if (index &gt;= 0) &#123;</div><div class="line">                    removeViewLocked(index, true);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            throw e;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，这里最关键的操作就是初始化了一个<code>ViewRootImpl</code>类的对象，调用它的<code>setView</code>方法注入之前的View。</p>
+<p>那么<code>ViewRootImpl</code>类是什么？它的<code>setView</code>方法又做了什么呢？</p>
+<p>我们先来看一下<code>ViewRootImlp</code>类的Javadoc</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">* The top of a view hierarchy, implementing the needed protocol between View</div><div class="line"> * and the WindowManager.  This is for the most part an internal implementation</div><div class="line"> * detail of &#123;@link WindowManagerGlobal&#125;.</div><div class="line"> public final class ViewRootImpl implements ViewParent,</div><div class="line">        View.AttachInfo.Callbacks, HardwareRenderer.HardwareDrawCallbacks</div><div class="line">        </div><div class="line">//View阶层的顶级，实现了View和WindowManager之间需要的协议，这是WindowManagerGlobal</div></pre></td></tr></table></figure>
+<p>来研究一下它的<code>setView</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void setView(View view, WindowManager.LayoutParams attrs, View panelParentView) &#123;</div><div class="line">        synchronized (this) &#123;</div><div class="line">        	if(mView ==null)&#123;</div><div class="line">             	 //省略了部分无关代码</div><div class="line">             	 mView = view;</div><div class="line">        		requestLayout();</div><div class="line">        		...</div><div class="line">        		view.assignParent(this); </div><div class="line">        	&#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，<code>setView</code>方法基本只有在第一次调用时才会生效，它先调用了自己的<code>requestLayout()</code>方法，然后又调用<code>View</code>的<code>assignParent(ViewParent v)</code>方法把自己注入View中</p>
+<p>这下就可以确定<code>View</code>最上层的<code>mParent</code>变量，最终指向的是<code>ViewParentImpl</code>类的实例引用</p>
+<p>那让我们再来看看<code>ViewParentImpl</code>中如何实现<code>requestLayout()</code>方法的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">    public void requestLayout() &#123;</div><div class="line">        if (!mHandlingLayoutInLayoutRequest) &#123;</div><div class="line">            checkThread(); //这里是Android中为什么不能用子线程修改ui的关键</div><div class="line">            mLayoutRequested = true; //修改标记为true</div><div class="line">            scheduleTraversals();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>众所周知，Android中是不能用子线程来更新ui的，原因就是在于<code>ViewRootImpl</code>类中的<code>requestLayout</code>方法在执行时，会首先检查当前线程是否是<code>ViewRootImpl</code>实例创建的线程。而唯一的<code>ViewRootImpl</code>对象是在主线程中被系统创建的。所以子线程中更新ui，就会导致<code>checkThread()</code>方法验证失败而抛出异常</p>
+</blockquote>
+<p>除了<code>checkThread()</code>以外，还执行了<code>scheduleTraversals()</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">void scheduleTraversals() &#123;</div><div class="line">        if (!mTraversalScheduled) &#123;</div><div class="line">            mTraversalScheduled = true;</div><div class="line">            mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();</div><div class="line">            mChoreographer.postCallback(</div><div class="line">                    Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);</div><div class="line">            if (!mUnbufferedInputDispatch) &#123;</div><div class="line">                scheduleConsumeBatchedInput();</div><div class="line">            &#125;</div><div class="line">            notifyRendererOfFramePending();</div><div class="line">            pokeDrawLockIfNeeded();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>这里执行了<code>Choreographer</code>类的实例的postCallback方法，方法最后将这个Runnable放入Message中发出到MessageQueue中并执行，我们来看这个Runnable做了什么</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">final class TraversalRunnable implements Runnable &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            doTraversal();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">final TraversalRunnable mTraversalRunnable = new TraversalRunnable();</div></pre></td></tr></table></figure>
+<p>再看看<code>doTraversal()</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">void doTraversal() &#123;</div><div class="line">        if (mTraversalScheduled) &#123;</div><div class="line">            mTraversalScheduled = false;</div><div class="line">            mHandler.getLooper().getQueue().removeSyncBarrier(mTraversalBarrier);</div><div class="line"></div><div class="line">            if (mProfile) &#123;</div><div class="line">                Debug.startMethodTracing(&quot;ViewAncestor&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            performTraversals();</div><div class="line"></div><div class="line">            if (mProfile) &#123;</div><div class="line">                Debug.stopMethodTracing();</div><div class="line">                mProfile = false;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>其中最关键的是执行了<code>performTraversals()</code>方法，这也是View绘制中最关键的一个方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void performTraversals() &#123;</div><div class="line">	 //省略了部分无关代码</div><div class="line">	 final View host = mView;</div><div class="line">	 ...</div><div class="line">	 host.dispatchAttachedToWindow(mAttachInfo, 0);//注入AttachInfo</div><div class="line">	 ...</div><div class="line">	 boolean layoutRequested = mLayoutRequested &amp;&amp; (!mStopped || mReportNextDraw);</div><div class="line">	 if (layoutRequested) &#123;</div><div class="line">            mLayoutRequested = false;	//清除标记</div><div class="line">     &#125;</div><div class="line">     ...</div><div class="line">     if (!mStopped || mReportNextDraw) &#123;</div><div class="line">     		...</div><div class="line">     		int childWidthMeasureSpec = getRootMeasureSpec(mWidth, lp.width);</div><div class="line">            int childHeightMeasureSpec = getRootMeasureSpec(mHeight, lp.height);</div><div class="line">            performMeasure(childWidthMeasureSpec, childHeightMeasureSpec);</div><div class="line">            ...</div><div class="line">     &#125;</div><div class="line">     ...</div><div class="line">	 final boolean didLayout = layoutRequested &amp;&amp; (!mStopped || mReportNextDraw);</div><div class="line">	 if (didLayout) &#123;</div><div class="line">            performLayout(lp, desiredWindowWidth, desiredWindowHeight);</div><div class="line">     &#125;</div><div class="line">     ...</div><div class="line">     boolean cancelDraw = mAttachInfo.mTreeObserver.dispatchOnPreDraw() ||</div><div class="line">                viewVisibility != View.VISIBLE;</div><div class="line">        if (!cancelDraw &amp;&amp; !newSurface) &#123;</div><div class="line">            if (!skipDraw || mReportNextDraw) &#123;</div><div class="line">                ...</div><div class="line">                performDraw();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">     ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中<code>performMeasure</code>、<code>performLayout</code>、<code>performDraw</code>最后基本都是去执行了View的measure、layout、draw方法，这也是View绘制三大步骤调用的时间点。</p>
+<p>这里我还特地标注一下<code>host.dispatchAttachedToWindow(mAttachInfo, 0)</code>方法，这个方法给View中注入了<code>mAttachInfo</code>的引用，而<code>mAttachInfo</code>的初始化是在<code>ViewRootImpl</code>的构造函数里</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public ViewRootImpl(Context context, Display display) &#123;</div><div class="line">	...</div><div class="line">  	mAttachInfo = new View.AttachInfo(mWindowSession, mWindow, display, this, mHandler, this);</div><div class="line">  	...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>AttachInfo</code>这个类基本就是提供各种底层信息的，借此，Window和View的联系就建立起来了。</p>
+<p>最后上一张图来整理下整个调用链</p>
+<p> <img src="/images/requestLayout.png" alt="requestLayout"></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/09/29/invalidate-方法和requestLayout-方法的区别/" data-toggle="tooltip" data-placement="top"
+                           title="invalidate()方法和requestLayout()方法的区别">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/09/24/总结一下Hexo-Github以及Wordpress搭博客/" data-toggle="tooltip" data-placement="top"
+                           title="总结一下Hexo+Github以及Wordpress搭博客">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从requestLayout-初探View的绘制原理"><span class="toc-text">从requestLayout()初探View的绘制原理</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/peng-zi-pei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2016
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        invalidate()方法和requestLayout()方法的区别｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2016/09/29/invalidate-方法和requestLayout-方法的区别/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>invalidate()方法和requestLayout()方法的区别</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2016-09-29
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            invalidate()方法和requestLayout()方法的区别
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="invalidate-方法和requestLayout-方法的区别"><a href="#invalidate-方法和requestLayout-方法的区别" class="headerlink" title="invalidate()方法和requestLayout()方法的区别"></a>invalidate()方法和requestLayout()方法的区别</h2><p>关于<code>requestLayout()</code>的解析以及在上一篇文章中讲过了，那么它和我们通常调用的<code>invalidate()</code>方法有什么区别呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void invalidate() &#123;</div><div class="line">        invalidate(true);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> void invalidate(boolean invalidateCache) &#123;</div><div class="line">        invalidateInternal(0, 0, mRight - mLeft, mBottom - mTop, invalidateCache, true);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"> void invalidateInternal(int l, int t, int r, int b, boolean invalidateCache, boolean fullInvalidate) &#123;</div><div class="line"> 		final AttachInfo ai = mAttachInfo;</div><div class="line">            final ViewParent p = mParent;</div><div class="line">            if (p != null &amp;&amp; ai != null &amp;&amp; l &lt; r &amp;&amp; t &lt; b) &#123;</div><div class="line">                final Rect damage = ai.mTmpInvalRect;</div><div class="line">                damage.set(l, t, r, b);</div><div class="line">                p.invalidateChild(this, damage);</div><div class="line">            &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>最后都会指向<code>invalidateInternal</code>这个方法，然后去调用其<code>ViewParent</code>的<code>invalidateChild</code>方法。一个View对象的上层通常是ViewGroup，我们去ViewGroup中查看这个方法的实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public final void invalidateChild(View child, final Rect dirty) &#123;</div><div class="line">	 do &#123;</div><div class="line">	 	...</div><div class="line">	 	parent = parent.invalidateChildInParent(location, dirty);</div><div class="line">	 	...</div><div class="line">	 &#125;while(parent!=null);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>指向了<code>parent</code>的<code>invalidateChildInParent</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public ViewParent invalidateChildInParent(final int[] location, final Rect dirty) &#123;</div><div class="line">  if(...)&#123;</div><div class="line">    if(...)&#123;</div><div class="line">      ...</div><div class="line">      return mParent;</div><div class="line">    &#125;else&#123;</div><div class="line">  	  ...</div><div class="line">      return mParent;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return null;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们知道这个<code>mParent</code>对象最终指向了<code>ViewRootImpl</code>，所以我们去<code>ViewRootImpl</code>类中寻找答案</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public ViewParent invalidateChildInParent(int[] location, Rect dirty) &#123;</div><div class="line">        checkThread();</div><div class="line">		 if (dirty == null) &#123;</div><div class="line">            invalidate();</div><div class="line">            return null;</div><div class="line">        &#125; else if (dirty.isEmpty() &amp;&amp; !mIsAnimating) &#123;</div><div class="line">            return null;</div><div class="line">        &#125; </div><div class="line">        ...</div><div class="line">        invalidateRectOnScreen(dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而<code>ViewRootImpl</code>类中的<code>invalidate()</code>和<code>invalidateRectOnScreen()</code>方法，最终都指向了<code>scheduleTraversals()</code>方法，也就是将<code>TraversalRunnable</code>类的实例post到消息队列中，后面的步骤我们在解析<code>requestLayout()</code>中讲过了</p>
+<p>这样看来，无论是<code>invalidate()</code>还是<code>requestLayout()</code>，它们最终都指向了<code>ViewRootImpl</code>中的<code>scheduleTraversals()</code>方法，所以本质上两者是一样的，那么它们到底有什么区别？</p>
+<p><strong>区别在于在View的requestLayout方法中，设置了标志位</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">static final int PFLAG_FORCE_LAYOUT                = 0x00001000;</div><div class="line">static final int PFLAG_INVALIDATED                 = 0x80000000;</div><div class="line">public void requestLayout()&#123;</div><div class="line">	...</div><div class="line">	mPrivateFlags |= PFLAG_FORCE_LAYOUT;</div><div class="line">    mPrivateFlags |= PFLAG_INVALIDATED;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而标志位的判断是在View的measure和layout方法中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public final void measure(int widthMeasureSpec, int heightMeasureSpec) &#123;</div><div class="line">   if ((mPrivateFlags &amp; PFLAG_FORCE_LAYOUT) == PFLAG_FORCE_LAYOUT ||</div><div class="line">   widthMeasureSpec != mOldWidthMeasureSpec ||</div><div class="line">   heightMeasureSpec != mOldHeightMeasureSpec) &#123;</div><div class="line">			...</div><div class="line">			int cacheIndex = (mPrivateFlags &amp; PFLAG_FORCE_LAYOUT) == PFLAG_FORCE_LAYOUT ?-1 : mMeasureCache.indexOfKey(key);</div><div class="line">            if (cacheIndex &lt; 0 || sIgnoreMeasureCache) &#123;</div><div class="line">                // measure ourselves, this should set the measured dimension flag back</div><div class="line">                onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">                mPrivateFlags3 &amp;= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</div><div class="line">            &#125;</div><div class="line">            ...</div><div class="line">             mPrivateFlags |= PFLAG_LAYOUT_REQUIRED;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void layout(int l, int t, int r, int b) &#123;</div><div class="line">	...</div><div class="line">	 if (changed || (mPrivateFlags &amp; PFLAG_LAYOUT_REQUIRED) == PFLAG_LAYOUT_REQUIRED) &#123;</div><div class="line">            onLayout(changed, l, t, r, b);</div><div class="line">            mPrivateFlags &amp;= ~PFLAG_LAYOUT_REQUIRED;</div><div class="line">            ...</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由于<code>PFLAG_LAYOUT_REQUIRED</code>这个执行<code>OnLayout</code>的标志位只有在<code>(mPrivateFlags &amp; PFLAG_FORCE_LAYOUT) == PFLAG_FORCE_LAYOUT |</code>的条件下才会被赋予，所以不会调用<code>layout()</code>方法（这也解释了某些情况下直接调用<code>layout()</code>无效的原因）</p>
+<p>所以<code>invalidate()</code>方法会跳过<code>measure</code>和<code>layout</code>直接执行<code>draw</code>，这就是两者的区别</p>
+<h2 id="关于postInvalidate"><a href="#关于postInvalidate" class="headerlink" title="关于postInvalidate()"></a>关于<code>postInvalidate()</code></h2><p>直接看View的源码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void postInvalidate(int left, int top, int right, int bottom) &#123;</div><div class="line">        postInvalidateDelayed(0, left, top, right, bottom);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">public void postInvalidateDelayed(long delayMilliseconds) &#123;</div><div class="line">        final AttachInfo attachInfo = mAttachInfo;</div><div class="line">        if (attachInfo != null) &#123;</div><div class="line">            attachInfo.mViewRootImpl.dispatchInvalidateDelayed(this, delayMilliseconds);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>直接去调用<code>ViewRootImpl</code>的<code>dispatchInvalidateDelayed</code>方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void dispatchInvalidateDelayed(View view, long delayMilliseconds) &#123;</div><div class="line">    Message msg = mHandler.obtainMessage(MSG_INVALIDATE, view);</div><div class="line">    mHandler.sendMessageDelayed(msg, delayMilliseconds);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而<code>mHandler</code>是<code>ViewRootImpl</code>的一个内部类，我们只看它对<code>MSG_INVALIDATE</code>这个参数的操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">final class ViewRootHandler extends Handler &#123;</div><div class="line">    @Override</div><div class="line">    public String getMessageName(Message message) &#123;</div><div class="line">        switch (message.what) &#123;</div><div class="line">            case MSG_INVALIDATE:</div><div class="line">                return &quot;MSG_INVALIDATE&quot;;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">        return super.getMessageName(message);</div><div class="line">    &#125;</div><div class="line">     @Override</div><div class="line">        public void handleMessage(Message msg) &#123;</div><div class="line">            switch (msg.what) &#123;</div><div class="line">            case MSG_INVALIDATE:</div><div class="line">                ((View) msg.obj).invalidate();</div><div class="line">                break;</div><div class="line">                ...</div><div class="line">         &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后还是执行了<code>invalidate()</code>操作，只不过是通过<code>Handler</code>的方式，实现了异步调用</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/09/29/从requestLayout-初探View的绘制原理/" data-toggle="tooltip" data-placement="top"
+                           title="从requestLayout()初探View的绘制原理">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#invalidate-方法和requestLayout-方法的区别"><span class="toc-text">invalidate()方法和requestLayout()方法的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于postInvalidate"><span class="toc-text">关于postInvalidate()</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/peng-zi-pei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2016
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>
