@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        《图解TCP/IP》读书笔记｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2016/11/17/图解tcp-ip/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>《图解TCP/IP》读书笔记</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2016-11-17
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#计算机网络"
+                           title="计算机网络">计算机网络</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            《图解TCP/IP》读书笔记
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <table>
+<thead>
+<tr>
+<th>层级</th>
+<th>功能</th>
+<th>主要协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7应用层</td>
+<td>针对应用的协议</td>
+<td>SSH, DNS, HTTP, FTP, telnet, SMTP</td>
+</tr>
+<tr>
+<td>6表示层</td>
+<td>数据格式转换</td>
+<td>无</td>
+</tr>
+<tr>
+<td>5会话层</td>
+<td>建立/接触通信链接</td>
+<td>无</td>
+</tr>
+<tr>
+<td>4传输层</td>
+<td>管理节点之间的数据传输</td>
+<td>TCP, UDP, UDP-Lite, SCCP, DCCP</td>
+</tr>
+<tr>
+<td>3网络层</td>
+<td>地址管理与路由选择</td>
+<td>ARP, IPv4, IPv6, ICMP, OSPF, RIP, NAT, DHCP</td>
+</tr>
+<tr>
+<td>2数据链路层</td>
+<td>传送有地址的帧及错误检测</td>
+<td>PPP, MTU</td>
+</tr>
+<tr>
+<td>1物理层</td>
+<td>以二进制形式在物理层传输数据</td>
+<td>IEEE802, ISO2110</td>
+</tr>
+</tbody>
+</table>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><ol>
+<li><h3 id="相关技术"><a href="#相关技术" class="headerlink" title="相关技术"></a>相关技术</h3><ul>
+<li><h4 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h4><p>MAC地址长48比特(bit)，MAC会烧录到ROM中，任何一个网卡的MAC地址都是唯一的</p>
+<blockquote>
+<p>实际上，即使MAC地址相同，只要不是同属一个数据链路就不会出现问题</p>
+</blockquote>
+</li>
+<li><h4 id="共享介质型网络"><a href="#共享介质型网络" class="headerlink" title="共享介质型网络"></a>共享介质型网络</h4><p>半双工通信</p>
+<ol>
+<li><h5 id="争用（CSMA-CD协议）"><a href="#争用（CSMA-CD协议）" class="headerlink" title="争用（CSMA/CD协议）"></a>争用（CSMA/CD协议）</h5><p>如果信道上没有数据流动，任何站都可以发送数据。一旦发生冲突，放弃发送数据，立即释放信道。延时一段时间再争用</p>
+</li>
+<li><h5 id="令牌传递方式（类似锁）"><a href="#令牌传递方式（类似锁）" class="headerlink" title="令牌传递方式（类似锁）"></a>令牌传递方式（类似锁）</h5></li>
+</ol>
+</li>
+<li><h4 id="非共享介质网络"><a href="#非共享介质网络" class="headerlink" title="非共享介质网络"></a>非共享介质网络</h4><p>全双工通信</p>
+</li>
+<li><h4 id="环路检测技术"><a href="#环路检测技术" class="headerlink" title="环路检测技术"></a>环路检测技术</h4><ol>
+<li>生成树方式</li>
+<li>源路由法</li>
+</ol>
+</li>
+<li><h4 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h4><p>在分散网络负载、变换部署网络设备的位置时，不需要重新修改布线，只要修改网段即可。</p>
+</li>
+</ul>
+</li>
+<li><h3 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h3><ul>
+<li><h4 id="以太网的帧格式"><a href="#以太网的帧格式" class="headerlink" title="以太网的帧格式"></a>以太网的帧格式</h4><p><img src="以太网帧格式" alt="http://jc.feikuaixue.com/wp-content/uploads/2015/10/frame.png"></p>
+<p>​</p>
+</li>
+</ul>
+</li>
+<li><h3 id="无线通信"><a href="#无线通信" class="headerlink" title="无线通信"></a>无线通信</h3><ol>
+<li><h3 id="PPP"><a href="#PPP" class="headerlink" title="PPP"></a>PPP</h3><p>Point-to-Point Protocol 指点对点协议</p>
+<p><img src="ppp协议帧" alt="http://s4.sinaimg.cn/middle/614f47314cae18d13be63&amp;690"></p>
+<ul>
+<li><h4 id="PPPoE"><a href="#PPPoE" class="headerlink" title="PPPoE"></a>PPPoE</h4><p>即PPP over Ethernet，可以利用PPP的验证功能是各家ISP有效管理终端用户的使用</p>
+</li>
+</ul>
+</li>
+<li><h3 id="其他链路"><a href="#其他链路" class="headerlink" title="其他链路"></a>其他链路</h3><ul>
+<li><p>ATM</p>
+<p>以信元的单位进行传输的数据链路，路线占用时间短能够高效传输大容量数据，主要用户广域网的连接</p>
+</li>
+<li><p>POS</p>
+</li>
+<li><p>FDDI</p>
+</li>
+<li><p>HDMI</p>
+</li>
+</ul>
+</li>
+<li><h3 id="VPN"><a href="#VPN" class="headerlink" title="VPN"></a>VPN</h3></li>
+</ol>
+</li>
+</ol>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><ol>
+<li><h3 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h3><ol>
+<li><h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><ul>
+<li>IP地址属于网络层地址</li>
+<li>数据链路的地址可以被抽象化为IP地址</li>
+<li>IP为了简化和提速，采用面向无连接。在发包之前，不需要建立与对端目标之间的连接</li>
+</ul>
+</li>
+<li><h4 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h4><p>IP地址由32位正整数表示，以每8位一组分成4组。</p>
+<p>由<u>网络地址</u>和<u>主机地址</u>组成，现在基本以子网掩码区分</p>
+<blockquote>
+<p>192.168.1.44/24 前24位为网络地址，后8位为主机地址</p>
+</blockquote>
+<ul>
+<li><h5 id="网络地址的分类"><a href="#网络地址的分类" class="headerlink" title="网络地址的分类"></a>网络地址的分类</h5><ul>
+<li><p>A类</p>
+<p>首位以0开头的地址，1~8位是网络地址。范围在<code>0.0.0.0</code>~<code>127.0.0.0</code></p>
+<p>一个网络可容纳主机地址上限为2^24-2</p>
+</li>
+<li><p>B类</p>
+<p>前两位为10开头的地址，1~16位是网络地址。范围在<code>128.0.0.0</code>~<code>191.255.0.0</code></p>
+<p>一个网络可容纳主机地址上限为2^16-2</p>
+</li>
+<li><p>C类</p>
+<p>前三位为110开头的地址，1~24位是网络地址。范围在<code>192.0.0.0</code>~<code>223.255.255.0</code></p>
+<p>一个网络可容纳主机地址上限为2^8-2 = 254</p>
+</li>
+<li><p>D类</p>
+<p>开头为1110的地址，1~32位是网络地址。范围在<code>224.0.0.0</code>~<code>239.255.255.255</code></p>
+<p>常用于多播</p>
+</li>
+</ul>
+</li>
+<li><h5 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h5><p>在同一个链路中互联的主机之间广播发送数据包，广播地址为IP地址中网络地址部分全部为1</p>
+<p>即在<code>172.20.0.0/16</code>的网络中，广播地址为<code>172.20.255.255</code></p>
+<p>广播分本地广播和直接广播，不同网络之间的广播叫直接广播</p>
+</li>
+<li><h5 id="IP多播"><a href="#IP多播" class="headerlink" title="IP多播"></a>IP多播</h5><p>多播用于将包发送给特定组内的所有主机</p>
+</li>
+<li><h5 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h5><p>现在受子网掩码的区分，将子类网络细分出比A类、B类、C类粒度更小的网络。</p>
+<p>它对应IP地址网络地址部分的位全部为“1”，对应主机地址的位全部为“0”</p>
+<p>即<code>172.20.100.0/26</code>对应的子网掩码为<code>255.255.255.192</code></p>
+</li>
+<li><h5 id="全局地址与私有地址"><a href="#全局地址与私有地址" class="headerlink" title="全局地址与私有地址"></a>全局地址与私有地址</h5><p>对没有连接互联网的独立网络中的主机，只要保证在本网络中内地址唯一，可以不用考虑互联网即可配置相应的IP地址。即出现了私有网络的IP地址</p>
+<ul>
+<li><p>A类私有IP</p>
+<p><code>10.0.0.0</code>~<code>10.255.255.255</code> (10.0.0.0/8)</p>
+</li>
+<li><p>B类私有IP</p>
+<p><code>172.16.0.0</code> ~ <code>172.31.255.255</code> (172.16.0.0/12)</p>
+</li>
+<li><p>C类私有IP</p>
+<p><code>192.168.0.0</code>~ <code>192.168.255.255</code> (192.168.0.0/16)</p>
+</li>
+</ul>
+<p>在此之外的IP地址称为全局IP。</p>
+<p>如果配有私有IP地址的主机联网时，则通过NAT进行通信</p>
+</li>
+</ul>
+</li>
+<li><h4 id="路由控制"><a href="#路由控制" class="headerlink" title="路由控制"></a>路由控制</h4><p>路由控制表的形成方式有两种：</p>
+<ol>
+<li>管理员手动设置，也叫静态路由控制</li>
+<li>路由器与其他路由器相互交换信息时自动刷新，也叫动态路由控制</li>
+</ol>
+<ul>
+<li><p>默认路由</p>
+<p>默认路由指路由表中任何一个地址都能与之匹配的记录，为<code>0.0.0.0/0</code></p>
+</li>
+<li><p>主机路由</p>
+<p>IP地址/32 称为主机路由。意味着基于主机上网卡上配置的IP地址本身，而不是基于该地址的网络地址部分进行路由</p>
+</li>
+<li><p>环回地址</p>
+<p>使用<code>127.0.0.1</code>作为还回地址，使用这个地址时数据包不会流向网络</p>
+</li>
+</ul>
+</li>
+<li><h4 id="IP报文分片"><a href="#IP报文分片" class="headerlink" title="IP报文分片"></a>IP报文分片</h4><p>由于数据链路不同，MTU也不同。IP报文的最大MTU为2^16-1。在目标主机端重组分片IP数据报成为现在的规范，但是对路由器负担加重</p>
+<ul>
+<li><p>路径MTU发现</p>
+<p>路径MTU（Path MTU）指从发送端主机到接收端主机之间不需要分片时最大MTU的大小，即路径中存在的所有数据链路中最小的MTU。</p>
+<p>路径MTU发现从发送主机按照路径MTU的大小将数据包分片后进行发送，可以避免在中途的路由器上进行分片处理</p>
+</li>
+</ul>
+<blockquote>
+<p>发送主机与路由器以FDDI连接，MTU = 4352，而以太网MTU=1500</p>
+<p>路由器会丢弃主机第一次发送的大小4352的包，然后通过ICMP的不可达消息将数据链路上MTU的值发给主机（即1500）</p>
+<p>随后主机分片后再以1500的包发给路由器</p>
+</blockquote>
+</li>
+<li><h4 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h4><p>IPv6地址长为128比特，一般写成8个16位字节，如<code>FEDC:BA98:7642:3215:DCF3:BA98:6723:CB39</code></p>
+<blockquote>
+<p>在IPv6中，如果出现连续的0可以将0省略并用两个冒号::隔开，一个IP地址中仅允许出现一次两个连续的冒号</p>
+</blockquote>
+</li>
+<li><h4 id="首部长度"><a href="#首部长度" class="headerlink" title="首部长度"></a>首部长度</h4><p>IPv4首部长度为20字节</p>
+</li>
+</ol>
+</li>
+<li><h3 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h3><p>  ARP，地址解析协议（Address Resolution Protocol）</p>
+<p>  实际通信时，必须同时知道IP地址和MAC地址（IP地址有层次性而MAC地址没有，仅凭MAC地址无法确定计算机的位置）。ARP借助ARP请求与ARP相应两种类型的包确定MAC地址。</p>
+<blockquote>
+<p>在网络A中，主机1想知道主机2的MAC地址，要通过广播发送一个ARP请求包，包中包含想要了解MAC地址的IP地址，目标IP与本身IP一致时，主机2将自己的MAC地址塞入ARP响应包返回给A</p>
+</blockquote>
+<p>为了避免不必要的网络流量，会把获取到的MAC地址缓存一段时间，即把第一次通过ARP获取到的MAC地址作为IP对MAC的映射关系存到一个ARP缓存表中</p>
+<ul>
+<li><p>RARP</p>
+<p>Reverse ARP，即通过MAC地址获取IP地址</p>
+</li>
+<li><p>代理ARP</p>
+<p>通过Proxy ARP将ARP请求转发给临近的网段</p>
+</li>
+</ul>
+</li>
+<li><h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><p>网络控制消息协议（Internet Control Message Protocol），用于在IP主机、路由器之间传递网络通不通、主机是否可达、路由是否可用等网络本身的控制信息</p>
+<blockquote>
+<p>主机A给主机B发送一个ARP请求包，路由1未能发现主机B的存在，于是给主机A发送一个ICMP包，说明发往主机B的包未能成功</p>
+</blockquote>
+<p>ICMP的通知消息分两类</p>
+<ol>
+<li>通知出错原因的错误信息</li>
+<li>用于诊断的查询信息</li>
+</ol>
+<p>以明文的形式通过IP进行传输</p>
+<p><strong>主要的ICMP消息</strong></p>
+<ul>
+<li><p>ICMP目标不可达</p>
+</li>
+<li><p>ICMP重定向消息</p>
+<p>路由器发现发送端主机使用了次优的路径发送数据，它会返回一个ICMP重定向消息给主机，包含最合适的路由信息和源数据。</p>
+</li>
+<li><p>ICMP超时消息</p>
+<p>IP包中有一个字段叫TTL（Time To Live）生存周期，它的值随每经过一个路由器就会减1，直到减到0该IP包就会被丢弃，同时给主机发送一个ICMP超时的消息，通知该包已经被丢弃</p>
+</li>
+<li><p>ICMP回送消息</p>
+<p>判断发送的数据包是否已经成功到达对端的一种消息。ping命令基于此实现</p>
+</li>
+</ul>
+</li>
+<li><h3 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h3><p>动态主机配置协议（Dynamic Host Configuration Protocol）</p>
+<p>使用前需要先假设一台DHCP服务器，将所要分配的IP地址、相应的子网掩码、路由控制信息、DNS服务器地址设置到服务器上。</p>
+<ul>
+<li><p>工作原理</p>
+<ol>
+<li><p>DHCP客户端广播发送DHCP发现包，要求设置IP地址和子网掩码；</p>
+<p>DHCP服务器接受该包并向客户端返回DHCP提供包，通知可以使用的网络设置</p>
+</li>
+<li><p>DHCP客户端广播发送DHCP请求包，通知服务器想要使用的设置；</p>
+<p>DHCP服务器接受该包并向客户端返回DHCP提供包，通知允许客户端的设置</p>
+</li>
+</ol>
+<blockquote>
+<p>这样保证即使重复设置也能正常工作</p>
+</blockquote>
+</li>
+</ul>
+<p>在大规模组织机构的网络环境中，一般会设置DHCP中继代理</p>
+</li>
+<li><h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>​Network Address Translator 网络地址转换，是用于在本地网络中使用私有地址，在连接互联网时专用全局IP地址的技术</p>
+</li>
+<li><h3 id="IP相关技术"><a href="#IP相关技术" class="headerlink" title="IP相关技术"></a>IP相关技术</h3></li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/10/17/Fragment应用原理解析/" data-toggle="tooltip" data-placement="top"
+                           title="Fragment应用原理解析">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层"><span class="toc-text">数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关技术"><span class="toc-text">相关技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC地址"><span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#共享介质型网络"><span class="toc-text">共享介质型网络</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#争用（CSMA-CD协议）"><span class="toc-text">争用（CSMA/CD协议）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#令牌传递方式（类似锁）"><span class="toc-text">令牌传递方式（类似锁）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非共享介质网络"><span class="toc-text">非共享介质网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#环路检测技术"><span class="toc-text">环路检测技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VLAN"><span class="toc-text">VLAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以太网"><span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#以太网的帧格式"><span class="toc-text">以太网的帧格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无线通信"><span class="toc-text">无线通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PPP"><span class="toc-text">PPP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PPPoE"><span class="toc-text">PPPoE</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他链路"><span class="toc-text">其他链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VPN"><span class="toc-text">VPN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层"><span class="toc-text">网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP协议"><span class="toc-text">IP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP地址"><span class="toc-text">IP地址</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#网络地址的分类"><span class="toc-text">网络地址的分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#广播"><span class="toc-text">广播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IP多播"><span class="toc-text">IP多播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#子网掩码"><span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#全局地址与私有地址"><span class="toc-text">全局地址与私有地址</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#路由控制"><span class="toc-text">路由控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP报文分片"><span class="toc-text">IP报文分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IPv6"><span class="toc-text">IPv6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#首部长度"><span class="toc-text">首部长度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARP"><span class="toc-text">ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICMP"><span class="toc-text">ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP"><span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP相关技术"><span class="toc-text">IP相关技术</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#计算机网络"
+                           title="计算机网络">计算机网络</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/peng-zi-pei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2016
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>
