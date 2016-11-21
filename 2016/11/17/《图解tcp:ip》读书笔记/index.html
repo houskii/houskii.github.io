@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        《图解TCP/IP》读书笔记｜Aus.Vic.Mel
+        《图解tcp/ip》读书笔记｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2016/11/17/图解tcp-ip/">
+    <link rel="canonical" href="/2016/11/17/《图解tcp:ip》读书笔记/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,7 +148,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>《图解TCP/IP》读书笔记</h1>
+                    <h1>《图解tcp/ip》读书笔记</h1>
                     
                     <span class="meta">
                          作者 Houskii
@@ -168,7 +168,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            《图解TCP/IP》读书笔记
+            《图解tcp/ip》读书笔记
         </span>
     </div>
 </header>
@@ -251,14 +251,14 @@
 </ul>
 </li>
 <li><h3 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h3><ul>
-<li><h4 id="以太网的帧格式"><a href="#以太网的帧格式" class="headerlink" title="以太网的帧格式"></a>以太网的帧格式</h4><p><img src="以太网帧格式" alt="http://jc.feikuaixue.com/wp-content/uploads/2015/10/frame.png"></p>
+<li><h4 id="以太网的帧格式"><a href="#以太网的帧格式" class="headerlink" title="以太网的帧格式"></a>以太网的帧格式</h4><p><img src="http://jc.feikuaixue.com/wp-content/uploads/2015/10/frame.png" alt="以太网帧格式"></p>
 <p>​</p>
 </li>
 </ul>
 </li>
 <li><h3 id="无线通信"><a href="#无线通信" class="headerlink" title="无线通信"></a>无线通信</h3><ol>
 <li><h3 id="PPP"><a href="#PPP" class="headerlink" title="PPP"></a>PPP</h3><p>Point-to-Point Protocol 指点对点协议</p>
-<p><img src="ppp协议帧" alt="http://s4.sinaimg.cn/middle/614f47314cae18d13be63&amp;690"></p>
+<p><img src="http://s4.sinaimg.cn/middle/614f47314cae18d13be63&amp;690" alt="ppp协议帧"></p>
 <ul>
 <li><h4 id="PPPoE"><a href="#PPPoE" class="headerlink" title="PPPoE"></a>PPPoE</h4><p>即PPP over Ethernet，可以利用PPP的验证功能是各家ISP有效管理终端用户的使用</p>
 </li>
@@ -342,8 +342,8 @@
 </li>
 <li><h4 id="路由控制"><a href="#路由控制" class="headerlink" title="路由控制"></a>路由控制</h4><p>路由控制表的形成方式有两种：</p>
 <ol>
-<li>管理员手动设置，也叫静态路由控制</li>
-<li>路由器与其他路由器相互交换信息时自动刷新，也叫动态路由控制</li>
+<li>管理员手动设置，也叫<u>静态路由控制</u></li>
+<li>路由器与其他路由器相互交换信息时自动刷新，也叫<u>动态路由控制</u></li>
 </ol>
 <ul>
 <li><p>默认路由</p>
@@ -415,7 +415,7 @@
 <p>IP包中有一个字段叫TTL（Time To Live）生存周期，它的值随每经过一个路由器就会减1，直到减到0该IP包就会被丢弃，同时给主机发送一个ICMP超时的消息，通知该包已经被丢弃</p>
 </li>
 <li><p>ICMP回送消息</p>
-<p>判断发送的数据包是否已经成功到达对端的一种消息。ping命令基于此实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">判断发送的数据包是否已经成功到达对端的一种消息。ping命令基于此实现</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -438,11 +438,183 @@
 </ul>
 <p>在大规模组织机构的网络环境中，一般会设置DHCP中继代理</p>
 </li>
-<li><h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>​Network Address Translator 网络地址转换，是用于在本地网络中使用私有地址，在连接互联网时专用全局IP地址的技术</p>
+<li><h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><ol>
+<li><p>Network Address Translator 网络地址转换，是用于在本地网络中使用私有地址，在连接互联网时专用全局IP地址的技术。还出现了可以转换TCP/UDP端口号的NA</p>
+<ul>
+<li><h4 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h4><ul>
+<li><h4 id="NAT-1"><a href="#NAT-1" class="headerlink" title="NAT"></a>NAT</h4><p>以<code>10.0.0.10</code>的主机与<code>163.211.120.9</code>的主机进行通信为例，利用NAT，途中的NAT路由器将发送源地址从<code>10.0.0.10</code>转换为全局的IP地址<code>202.244.174.37</code>再发送数据。反之，当包从地址<code>163.211.120.9</code>发过来时，目标地址<code>202.244.174.37</code>先被转换成私有IP地址<code>10.0.0.10</code>再被转发</p>
+<blockquote>
+<p>在NAT路由器内部，有一张自动生成的用来生成转换地址的表。当<code>10.0.0.10</code>向163.211.120.9发送第一个包时生成这张表，并按照表中的映射关系进行处理</p>
+</blockquote>
 </li>
-<li><h3 id="IP相关技术"><a href="#IP相关技术" class="headerlink" title="IP相关技术"></a>IP相关技术</h3></li>
+<li><h4 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h4><p>目标主机<code>163.211.120.9</code>的端口号是80，LAN中有两个客户端<code>10.0.0.10</code>和<code>10.0.0.11</code>同时进行通信，并且这两个客户端的本地端口都是1025。如果仅转换IP地址为全局地址<code>202.244.174.37</code>，则转换后所有数字完全一致。所以只要将<code>10.0.0.11</code>的转换为<code>202.244.174.37:1026</code>就可以解决。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
-
+<ul>
+<li><h4 id="潜在问题"><a href="#潜在问题" class="headerlink" title="潜在问题"></a>潜在问题</h4><ul>
+<li>无法从NAT的外部向内部服务器建立连接</li>
+<li>转换表的生成与转换操作都会产生一定开销</li>
+<li>一旦NAT遇到异常需要重新启动时，所有TCP连接都将会被重置，即使使用两台NAT做容灾备份</li>
+</ul>
+</li>
+<li><h4 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h4><ol>
+<li>使用IPv6</li>
+<li>在NAT内侧主机上为了生成NAT转换表，需要先发送一个虚拟的网络包给NAT的外侧。NAT会照样读取包首部中的内容并自动生成一个转换表。如果转换表构造合理，就可以实现NAT外侧主机与内侧主机建立连接。应用还可以通过一定的方法将NAT路由器上附属的全局IP地址传给应用。NAT外侧与内侧可以进行通信，这种现象叫做<strong>NAT穿越</strong></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 id="RIP"><a href="#RIP" class="headerlink" title="RIP"></a>RIP</h3><p>Routing Information Protocol 是距离向量型的一种路由协议，广泛用于LAN。使用UDP传输</p>
+<p>RIP将路由控制信息定期（30s）向全网广播一次，如果等待了6次仍未收到路由信息，会关闭路由之间的连接。</p>
+<p>RIP基于距离向量算法决定路径。距离（Metrics）的单位为“跳数”，指经过的路由器的个数。根据距离向量生成距离向量表，再抽出较小的路由生成最终的路由控制表</p>
+<blockquote>
+<p>路由表中最长距离不超过16，防止无限计数问题</p>
+</blockquote>
+</li>
+<li><h3 id="OSPF"><a href="#OSPF" class="headerlink" title="OSPF"></a>OSPF</h3><p>Open Source Path First 是一种链路状态型路由协议，使用IP传输。</p>
+<blockquote>
+<p>包括OSPF在内的SPF路由协议都基于Dijstra算法</p>
+</blockquote>
+<p>OSPF中，路由器之间交换链路状态生成网络拓扑信息，然后再根据这个拓扑信息生成路由控制表。</p>
+<p>RIP的路由选择，要求途中经过的路由器个数越少越好。与之相比，**OSPF可以给每条链路赋予一个权重，并始终选择一个权重最小的路径作为最终路由。</p>
+</li>
+<li><h3 id="IP相关技术"><a href="#IP相关技术" class="headerlink" title="IP相关技术"></a>IP相关技术</h3><ul>
+<li><p>IP隧道</p>
+<p>为了让属于IPv4和IPv6的网络之间可以正常通信，在IP首部后面继续追加IP首部。这种在网络层首部后面继续追加网络层首部的通信方式叫做“IP隧道”</p>
+</li>
+<li><p>IP任播</p>
+<p>IP任播是指为那些提供同一种服务的服务器配置同一个IP地址，并与最近的服务器进行通信的一种方法。例如DNS根域名服务器。</p>
+<blockquote>
+<p>IP任播无法保证第一个包和第二个包发送给同一个主机</p>
+</blockquote>
+</li>
+<li><p>Mobile IP</p>
+<ul>
+<li>显式拥塞通知</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><ol>
+<li><h3 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h3><ol>
+<li><p>定义</p>
+<p>数据链路和IP中的地址，分别指MAC地址与IP地址。MAC地址用来识别同一链路中不同的计算机，后者用来识别TCP/IP网络中互连的主机和路由器。传输层中类似地址的概念，就是端口号</p>
+</li>
+<li><p>端口号如何确定</p>
+<ul>
+<li>标准既定</li>
+<li>时序分配</li>
+</ul>
+</li>
+<li><p>端口号与协议</p>
+<p>端口号由其使用的传输层协议决定。不同的传输协议可以使用相同的端口号。数据到达IP层后，会首先检查IP首部的协议号，再传给相应协议的模块。</p>
+</li>
+</ol>
+</li>
+<li><h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><p>User Datagram Protocol</p>
+<p>UDP利用IP提供面向无连接的通信服务，没有流量控制和重发。</p>
+</li>
+<li><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p>Transmission Control Protocol</p>
+<p>是一种面向连接的通信服务，可以进行丢包时的重发控制，还可以对乱序的分包进行顺序控制。</p>
+<p><strong>TCP的特点</strong></p>
+<ul>
+<li><h4 id="连接管理"><a href="#连接管理" class="headerlink" title="连接管理"></a>连接管理</h4><p><img src="http://hi.csdn.net/attachment/201108/7/0_131271823564Rx.gif" alt="tcp/ip"></p>
+<p>TCP通过三次握手（three-way handshake）创建一个连接：</p>
+<p>服务器端打开一个套接字socket然后监听来自另一方的连接，这就是常指的被动打开（passive open）。服务器被被动打开以后，用户端就能创建主动打开</p>
+<ol>
+<li><p>客户端通过向服务器发送一个<code>SYN</code>来创建一个主动打开，客户端把这段连接的序号设为随机数x</p>
+<p>此时客户端进入<u>SYN-SEND</u>状态</p>
+<p>包：SYN = 1 ，seq = x</p>
+<p>​</p>
+</li>
+<li><p>服务端回送一个<code>SYN/ACK</code>，确认码ack应该为x+1，<code>SYN/ACK</code>包本身又有一个随机序号y</p>
+<p>此时服务端进入<u>SYN-RECEIVE</u>状态，客户端接收到<code>SYN/ACK</code>后进入<u>ESTABLISHED</u>状态</p>
+<p>包：SYN = 1，ACK = 1 ，ack = x+1 ，seq = y</p>
+<p>​</p>
+</li>
+<li><p>最后，客户端再发送一个<code>ACK</code>，服务端收到这个<code>ACK</code>时完成握手。此时包序号被设定为x+1，响应为y+1</p>
+<p>此时服务端进入<u>ESTABLISHED</u>状态</p>
+<p>包：ACK = 1，ack = y +1 ，ses = x+1</p>
+</li>
+</ol>
+<p>​</p>
+<p>TCP通过四次挥手来关闭连接：</p>
+<blockquote>
+<p>由于TCP连接是全双工的，因此每个方向都必须单独进行关闭。这个原则是当一方完成它的数据发送任务后就能发送一个FIN来终止这个方向的连接。收到一个 FIN只意味着这一方向上没有数据流动，一个TCP连接在收到一个FIN后仍能发送数据</p>
+</blockquote>
+<p>客户端和服务端都处于<u>ESTABLISHED</u>状态，此时发起主动关闭的为客户端</p>
+<ol>
+<li><p>客户端发送一个<code>FIN</code>给服务端，来关闭它们之间的数据传送，客户端把这段信息的序号设为随机数u。</p>
+<p>此时客户端进入<u>FIN-WAIT-1</u>阶段。</p>
+<p>包：FIN=1，seq=u </p>
+<p>​</p>
+</li>
+<li><p>服务端收到这个<code>FIN</code>，它发回一个<code>ACK</code>，确认码ack为收到的序号+1，即ack=u+1，包本身随机序号seq为v。</p>
+<p>此时服务端进入<u>CLOSE-WAIT</u>状态；客户端收到后进入<code>FIN-WAIT-2</code>状态</p>
+<p>包：ACK=1 ，seq = v ，ack = u+1</p>
+<p>​</p>
+</li>
+<li><p>服务器准备关闭与客户端的连接，发送一个<code>FIN</code>给客户端。确认码ack为收到的序号+1，即ack=u+1，包本身随机序号seq为w。</p>
+<p>此时服务器进入<u>LAST_ACK</u>状态</p>
+<p>包：FIN = 1，ACK =1，seq = w，ack = u+1</p>
+<p>​</p>
+</li>
+<li><p>客户端收到这个<code>FIN</code>，发回报文<code>ACK</code>确认，并将确认序号ack设置为收到的序号+1，即ack=w+1，包本身序号为<code>FIN</code>包的确认码，即seq = u + 1</p>
+<p>此时客户端进入<u>TIME-WAIT</u>状态，在关闭连接之前，客户端至少需要等待2个MSL（Max Segment Lifetime），随后关闭和服务端的连接。服务端收到<code>FIN</code>，关闭与客户端的连接</p>
+<p>包：ACK = 1，seq = u+1 ， ack = w+1</p>
+</li>
+</ol>
+<blockquote>
+<p>Q&amp;A</p>
+<p>Q1：为什么断开连接时客户端要有TIME-WAIT状态？</p>
+<p>A：TIME_WAIT是TCP协议用以保证被重新分配的socket不会受到之前残留的延迟重发报文影响的机制,是必要的逻辑保证</p>
+<p>​</p>
+<p>Q2：断开连接时，服务端还未发送FIN包时，是否可以继续向客户端发送数据？</p>
+<p>A：可以</p>
+<p>​</p>
+<p>Q3：为什么连接的时候是三次握手，关闭时却是四次挥手？</p>
+<p>A：服务端在确认客户端想要断开连接的请求时，可能存在数据还未传输完毕的情况，先回复ACK报文，在数据传输完成后再发送FIN报文</p>
+<p>​</p>
+<p>Q4：断开连接时，服务端是否可以将ACK和FIN包一起发送给客户端？</p>
+<p>A：可以</p>
+</blockquote>
+</li>
+<li><h4 id="通过序列号与确认应答提高可靠性"><a href="#通过序列号与确认应答提高可靠性" class="headerlink" title="通过序列号与确认应答提高可靠性"></a>通过序列号与确认应答提高可靠性</h4><p>TCP通过肯定的确认应答（ACK）实现可靠的数据传输。当发送端将数据发出之后会等待对端的确认应答。如果有确认应答，说明数据已经成功到达对端。但反之，也非100%是数据丢失，还有可能是数据已经收到但应答丢失。</p>
+<p>而确认应答处理、重发控制、重复控制这些功能都可以通过序列号和确认应答号来实现，TCP借此实现可靠传输。</p>
+</li>
+<li><h4 id="窗口控制与重发控制"><a href="#窗口控制与重发控制" class="headerlink" title="窗口控制与重发控制"></a>窗口控制与重发控制</h4><p>TCP以1个段为单位，每发一个段进行一次确认应答的处理，但如果每次都等到收到确认才再次发送，包往返时间越长性能越低。</p>
+<p>因此TCP引入了窗口的概念，发送端主机在发送了一个段以后不必要一直等待确认应答，而是继续发送。<strong>窗口大小就是指无需等待确认应答而可以继续发送数据的最大值</strong>。这个机制实现了使用大量的缓冲区，通过对多个段同时进行确认应答的功能。</p>
+<p>在滑动窗口以外的部分包括尚未发送的数据以及以及确认对端收到的数据。当数据发出口若如期收到确认应答就可以不用再进行重发，此时数据就可以从缓存区清除。收到确认应答的情况下，将窗口滑动到确认应答中的序列号位置。这种机制也成为<strong>滑动窗口机制</strong></p>
+<p>使用了窗口控制机制，某些确认应答即便丢失也无需重发。</p>
+<p>​</p>
+<p>当某一报文段丢失后，发送端会一直收到序号为报文段首序号的确认应答。如数据1001~2000丢失，则确认应答会一直发送序号为1001的确认应答。在窗口比较大又出现报文段丢失的情况下，同一个序号的确认应答将会被重复不断地返回，而发送端主机如果连续3次收到同一个确认应答，就会将其所对应的数据进行重发。这种称为<strong>高速重发控制</strong>。</p>
+</li>
+<li><h4 id="流控制"><a href="#流控制" class="headerlink" title="流控制"></a>流控制</h4><p>为了防止在高负荷情况下无法接受任何数据，导致数据被丢弃而触发重发机制。TCP提供流控制机制，让发送端根据接收端的实际接受能力控制发送的数据量。</p>
+<p>具体操作是，接收端主机向发送端主机通知自己可以接收数据的大小，于是发送端会发送不超过这个限度的数据。这个限度就被称为<strong>窗口大小</strong>。如果窗口的更新通知在传送途中丢失，可能会导致无法继续通信。为了避免此类问题的发生，发送端主机会时不时发送一个叫做窗口探测的数据段来获取</p>
+</li>
+<li><h4 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h4><p>如果在通信刚开始或者网络出现拥堵时突然发送一个较大的数据，极有可能会导致整个网络的瘫痪。</p>
+<p>首先为了在发送端调节要发送的数据量，定义了一个叫做“拥塞窗口的概念”，在慢启动时，将这个窗口大小设置为1个数据段（1 MSS）发送数据，之后每收到一次确认应答，拥塞窗口的值就加1。发送数据包时，将拥塞窗口大小和接收端主机通知窗口大小做比较，选择较小的值，发送比其还小的数据量。</p>
+<p>在超时重发时，会设置为当前拥塞窗口一半的大小。</p>
+</li>
+</ul>
+<p><strong>提高网络利用率的规范</strong></p>
+<ul>
+<li>Nagle算法</li>
+<li>捎带应答</li>
+</ul>
+</li>
+<li><h4 id="其他传输层协议"><a href="#其他传输层协议" class="headerlink" title="其他传输层协议"></a>其他传输层协议</h4><p>UDP-Lite</p>
+<p>DCCP</p>
+<p>SCTP</p>
+<p>​</p>
+</li>
+</ol>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2>
                 <hr>
                 
 
@@ -464,7 +636,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层"><span class="toc-text">数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关技术"><span class="toc-text">相关技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC地址"><span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#共享介质型网络"><span class="toc-text">共享介质型网络</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#争用（CSMA-CD协议）"><span class="toc-text">争用（CSMA/CD协议）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#令牌传递方式（类似锁）"><span class="toc-text">令牌传递方式（类似锁）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非共享介质网络"><span class="toc-text">非共享介质网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#环路检测技术"><span class="toc-text">环路检测技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VLAN"><span class="toc-text">VLAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以太网"><span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#以太网的帧格式"><span class="toc-text">以太网的帧格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无线通信"><span class="toc-text">无线通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PPP"><span class="toc-text">PPP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PPPoE"><span class="toc-text">PPPoE</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他链路"><span class="toc-text">其他链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VPN"><span class="toc-text">VPN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层"><span class="toc-text">网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP协议"><span class="toc-text">IP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP地址"><span class="toc-text">IP地址</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#网络地址的分类"><span class="toc-text">网络地址的分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#广播"><span class="toc-text">广播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IP多播"><span class="toc-text">IP多播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#子网掩码"><span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#全局地址与私有地址"><span class="toc-text">全局地址与私有地址</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#路由控制"><span class="toc-text">路由控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP报文分片"><span class="toc-text">IP报文分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IPv6"><span class="toc-text">IPv6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#首部长度"><span class="toc-text">首部长度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARP"><span class="toc-text">ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICMP"><span class="toc-text">ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP"><span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP相关技术"><span class="toc-text">IP相关技术</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层"><span class="toc-text">数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关技术"><span class="toc-text">相关技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC地址"><span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#共享介质型网络"><span class="toc-text">共享介质型网络</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#争用（CSMA-CD协议）"><span class="toc-text">争用（CSMA/CD协议）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#令牌传递方式（类似锁）"><span class="toc-text">令牌传递方式（类似锁）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非共享介质网络"><span class="toc-text">非共享介质网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#环路检测技术"><span class="toc-text">环路检测技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VLAN"><span class="toc-text">VLAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以太网"><span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#以太网的帧格式"><span class="toc-text">以太网的帧格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无线通信"><span class="toc-text">无线通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PPP"><span class="toc-text">PPP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PPPoE"><span class="toc-text">PPPoE</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他链路"><span class="toc-text">其他链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VPN"><span class="toc-text">VPN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层"><span class="toc-text">网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP协议"><span class="toc-text">IP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP地址"><span class="toc-text">IP地址</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#网络地址的分类"><span class="toc-text">网络地址的分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#广播"><span class="toc-text">广播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IP多播"><span class="toc-text">IP多播</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#子网掩码"><span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#全局地址与私有地址"><span class="toc-text">全局地址与私有地址</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#路由控制"><span class="toc-text">路由控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP报文分片"><span class="toc-text">IP报文分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IPv6"><span class="toc-text">IPv6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#首部长度"><span class="toc-text">首部长度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARP"><span class="toc-text">ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICMP"><span class="toc-text">ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP"><span class="toc-text">DHCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-text">NAT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#工作机制"><span class="toc-text">工作机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-1"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT"><span class="toc-text">NAPT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#潜在问题"><span class="toc-text">潜在问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RIP"><span class="toc-text">RIP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSPF"><span class="toc-text">OSPF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP相关技术"><span class="toc-text">IP相关技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传输层"><span class="toc-text">传输层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#端口号"><span class="toc-text">端口号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP"><span class="toc-text">UDP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP"><span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#连接管理"><span class="toc-text">连接管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过序列号与确认应答提高可靠性"><span class="toc-text">通过序列号与确认应答提高可靠性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#窗口控制与重发控制"><span class="toc-text">窗口控制与重发控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#流控制"><span class="toc-text">流控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#拥塞控制"><span class="toc-text">拥塞控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他传输层协议"><span class="toc-text">其他传输层协议</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用层"><span class="toc-text">应用层</span></a></li></ol>
                 </div>
             </div>
         </div>
