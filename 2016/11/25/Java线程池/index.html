@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Articles｜Aus.Vic.Mel
+        Java线程池｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/tags/">
+    <link rel="canonical" href="/2016/11/25/Java线程池/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
 " data-ishome = "false" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -126,157 +126,168 @@
 </script>
 
 <!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
 <style>
-    .intro-header .site-heading {
-        margin: 50px;
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
     }
+
+    
 </style>
 
-<!-- Page Header -->
 <header class="intro-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading text-center">
-                    <h1>Articles</h1>
-                    <span class="subheading"></span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Java线程池</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2016-11-25
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#JAVA"
+                           title="JAVA">JAVA</a>
+                        
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Java线程池
+        </span>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <!-- 标签云 -->
-            <div id='tag_cloud' class="tags">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h3><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public ThreadPoolExecutor(int corePoolSize,</div><div class="line">                              int maximumPoolSize,</div><div class="line">                              long keepAliveTime,</div><div class="line">                              TimeUnit unit,</div><div class="line">                              BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                              ThreadFactory threadFactory,</div><div class="line">                              RejectedExecutionHandler handler) &#123;</div><div class="line">                                ...</div><div class="line">                              &#125;</div></pre></td></tr></table></figure>
+<ol>
+<li><p><code>corePoolSize</code></p>
+<p>线程池的核心线程数</p>
+</li>
+<li><p><code>maximumPoolSize</code></p>
+<p>线程池的最大线程数</p>
+</li>
+<li><p><code>keepAliveTime</code></p>
+<p>非核心线程闲置的超时时长</p>
+</li>
+<li><p><code>unit</code></p>
+<p>用于指定<code>keepAliveTime</code>参数的时间单位</p>
+</li>
+<li><p><code>workQueue</code></p>
+<p>线程池中的任务队列</p>
+</li>
+<li><p><code>threadFactory</code></p>
+<p>创建新线程的线程工厂</p>
+</li>
+<li><p><code>handler</code></p>
+<p>提交任务阻塞时的处理器</p>
+<p>​</p>
+</li>
+</ol>
+<h3 id="Executors"><a href="#Executors" class="headerlink" title="Executors"></a>Executors</h3><ul>
+<li><p>FixedThreadPool</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public static ExecutorService newFixedThreadPool(int nThreads) &#123;</div><div class="line">    return new ThreadPoolExecutor(nThreads, nThreads,</div><div class="line">                                  0L, TimeUnit.MILLISECONDS,</div><div class="line">                                  new LinkedBlockingQueue&lt;Runnable&gt;());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>是一种线程数量固定的线程池。当线程处于空闲状态时并不会被回收，除非线程池被关闭了。当所有的线程都处于活动状态时，新任务会处于等待状态，直到有线程空闲出来。由于<code>FixedThreadPool</code>只有核心线程并且这些核心线程不会被回收，这意味着它能够更加快速地响应外界的请求。</p>
+<p>​</p>
+</li>
+<li><p>CachedThreadPool</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public static ExecutorService newCachedThreadPool() &#123;</div><div class="line">    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,</div><div class="line">                                  60L, TimeUnit.SECONDS,</div><div class="line">                                  new SynchronousQueue&lt;Runnable&gt;());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>是一种线程数量不定的线程池，只有非核心线程。当线程池中的线程都处于活动状态时，线程池会创建新的线程来处理任务，否则就会利用空闲的线程来处理新任务。线程空闲超过60秒就会被回收。 </p>
+<p>​</p>
+</li>
+<li><p>ScheduledThreadPool</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) &#123;</div><div class="line">        return new ScheduledThreadPoolExecutor(corePoolSize);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public ScheduledThreadPoolExecutor(int corePoolSize) &#123;</div><div class="line">        super(corePoolSize, Integer.MAX_VALUE,</div><div class="line">              DEFAULT_KEEPALIVE_MILLIS, MILLISECONDS,</div><div class="line">              new DelayedWorkQueue());</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>这是一种核心线程数固定的线程，非核心线程数无限，当非核心线程闲置时会被立刻回收</p>
+<p>​</p>
+</li>
+<li><p>SingleThreadExecutor</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public static ExecutorService newSingleThreadExecutor() &#123;</div><div class="line">        return new FinalizableDelegatedExecutorService</div><div class="line">            (new ThreadPoolExecutor(1, 1,</div><div class="line">                                    0L, TimeUnit.MILLISECONDS,</div><div class="line">                                    new LinkedBlockingQueue&lt;Runnable&gt;()));</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>线程内部只有一个核心线程，它确保所有任务都在同一个线程中按顺序执行。</p>
+</li>
+</ul>
+
+                <hr>
                 
-                <a href="#JAVA" title="JAVA" rel="3">JAVA</a>
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/11/17/《图解tcp:ip》读书笔记/" data-toggle="tooltip" data-placement="top"
+                           title="《图解tcp/ip》读书笔记">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
                 
-                <a href="#Android" title="Android" rel="3">Android</a>
+
                 
-                <a href="#计算机网络" title="计算机网络" rel="1">计算机网络</a>
-                
-                <a href="#兴趣" title="兴趣" rel="1">兴趣</a>
-                
+
             </div>
 
-            <!-- 标签列表 -->
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="JAVA">
-                    <span class="tag-text">JAVA</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/2016/09/22/JavaSE集合框架整理/">
-                        <h2 class="post-title">
-                            JavaSE集合框架整理
-                        </h2>
-                        
-                    </a>
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程池"><span class="toc-text">线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadPoolExecutor"><span class="toc-text">ThreadPoolExecutor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executors"><span class="toc-text">Executors</span></a></li></ol></li></ol>
                 </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/2016/11/25/Java线程池/">
-                        <h2 class="post-title">
-                            Java线程池
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/2016/09/11/《深入理解Java虚拟机》读书笔记/">
-                        <h2 class="post-title">
-                            《深入理解Java虚拟机》读书笔记
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
             </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Android">
-                    <span class="tag-text">Android</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/2016/10/17/Fragment应用原理解析/">
-                        <h2 class="post-title">
-                            Fragment应用原理解析
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/2016/09/29/从requestLayout-初探View的绘制原理/">
-                        <h2 class="post-title">
-                            从requestLayout()初探View的绘制原理
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/2016/09/29/invalidate-方法和requestLayout-方法的区别/">
-                        <h2 class="post-title">
-                            invalidate()方法和requestLayout()方法的区别
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="计算机网络">
-                    <span class="tag-text">计算机网络</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/2016/11/17/《图解tcp:ip》读书笔记/">
-                        <h2 class="post-title">
-                            《图解tcp/ip》读书笔记
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="兴趣">
-                    <span class="tag-text">兴趣</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/2016/09/24/总结一下Hexo-Github以及Wordpress搭博客/">
-                        <h2 class="post-title">
-                            总结一下Hexo+Github以及Wordpress搭博客
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-            </div>
-            
-
         </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#JAVA"
+                           title="JAVA">JAVA</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
     </div>
-</div>
+</article>
+
+
+
+
+
 
 <!-- Footer -->
 <!-- Footer -->
