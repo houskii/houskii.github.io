@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        字符串匹配算法之Sunday算法｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2017/01/14/字符串匹配算法之Sunday算法/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>字符串匹配算法之Sunday算法</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2017-01-14
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            字符串匹配算法之Sunday算法
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="字符串匹配算法之Sunday算法"><a href="#字符串匹配算法之Sunday算法" class="headerlink" title="字符串匹配算法之Sunday算法"></a>字符串匹配算法之Sunday算法</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>我们第一次接触字符串匹配，想到的肯定是直接用2个循环来遍历，这样代码虽然简单，但时间复杂度却是<code>Ω(mn)</code>，也就是达到了字符串匹配效率的下限。于是后来人经过研究，构造出了著名的KMP算法（Knuth-Morris-Pratt算法），让我们的时间复杂度降低到了<code>O(m+n)</code>，但现代文字处理器中，却很少使用KMP算法来做字符串匹配，因为还是太慢了。现在主流的算法是BM算法（Boyer-Moore算法），成功让平均时间复杂度降低到了<code>O(m/n)</code>，而Sunday算法，则是对BM算法的进一步小幅优化。</p>
+<p>KMP算法很多人看了一遍遍以后，对<code>next[n]</code>数组的理解还是有点困难（包括笔者），写代码的时候总是容易变成这种情况（/捂脸.jpg）：</p>
+<blockquote>
+<p>（切到网页）：马冬梅</p>
+<p>（切到编译器）：马什么梅</p>
+<p>（切到网页）：马冬梅</p>
+<p>（切到编译器）：马冬什么</p>
+<p>（切到网页）：马冬梅</p>
+<p>（切到编译器）：什么冬梅</p>
+</blockquote>
+<p>而Sunday算法，理解起来则是非常容易，同时极低的时间复杂度，让Sunday算法成为了笔者目前最常使用的字符串匹配算法</p>
+<h3 id="算法解释"><a href="#算法解释" class="headerlink" title="算法解释"></a>算法解释</h3><p>Sunday算法和BM算法稍有不同的是，Sunday算法是从前往后匹配，在匹配失败时关注的是主串中参加匹配的最末位字符的下一位字符。</p>
+<ul>
+<li>如果该字符没有在模式串中出现则直接跳过，即移动位数 = 模式串长度 + 1；</li>
+<li>否则，其移动位数 = 模式串长度 - 该字符最右出现的位置(以0开始) = 模式串中该字符最右出现的位置到尾部的距离 + 1。</li>
+</ul>
+<p>下面举个例子说明下Sunday算法。假定现在要在主串”substring searching”中查找模式串”search”。</p>
+<ul>
+<li><p>刚开始时，把模式串与文主串左边对齐： </p>
+<p><img src="http://img.blog.csdn.net/20160708122016780" alt="Sunday算法1"></p>
+</li>
+</ul>
+<ul>
+<li>结果发现在第2个字符处发现不匹配，不匹配时关注主串中参加匹配的最末位字符的下一位字符，即标粗的字符 <code>i</code>，因为模式串search中并不存在<code>i</code>，所以模式串直接跳过一大片，向右移动位数 = 匹配串长度 + 1 = 6 + 1 = 7，从 <code>i</code> 之后的那个字符（即字符<code>n</code>）开始下一步的匹配，如下图：<br><img src="http://img.blog.csdn.net/20160708122307562" alt="Sunday2"></li>
+<li>结果第一个字符就不匹配，再看主串中参加匹配的最末位字符的下一位字符，是’r’，它出现在模式串中的倒数第3位，于是把模式串向右移动3位（m - 3 = 6 - 3 = r 到模式串末尾的距离 + 1 = 2 + 1 =3），使两个’r’对齐，如下：<br><img src="http://img.blog.csdn.net/20160708122414877" alt="Sunday3"></li>
+<li>匹配成功。</li>
+</ul>
+<h3 id="详细代码（Java版）"><a href="#详细代码（Java版）" class="headerlink" title="详细代码（Java版）"></a>详细代码（Java版）</h3><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ASCII_SIZE = <span class="number">126</span>;   </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sunday</span><span class="params">(<span class="keyword">char</span>[] total,<span class="keyword">char</span>[] part)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> tSize = total.length;</div><div class="line">        <span class="keyword">int</span> pSize = part.length;</div><div class="line">        <span class="keyword">int</span>[] move = <span class="keyword">new</span> <span class="keyword">int</span>[ASCII_SIZE];</div><div class="line">        <span class="comment">//主串参与匹配最末位字符移动到该位需要移动的位数</span></div><div class="line">  		<span class="keyword">for</span> (<span class="keyword">int</span> i= <span class="number">0</span>;i&lt;ASCII_SIZE;i++)&#123;</div><div class="line">            move[i] = pSize+<span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">       </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;pSize;i++)&#123;</div><div class="line">            move[part[i]] = pSize-i;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> s = <span class="number">0</span>;<span class="comment">//模式串头部在字符串位置</span></div><div class="line">        </div><div class="line">        <span class="keyword">int</span> j;<span class="comment">//模式串已经匹配了的长度</span></div><div class="line">        </div><div class="line">        <span class="keyword">while</span>(s&lt;=tSize-pSize)&#123;<span class="comment">//到达末尾之前</span></div><div class="line">            j = <span class="number">0</span>;</div><div class="line">            <span class="keyword">while</span>(total[s+j]==part[j])&#123;</div><div class="line">                j++;</div><div class="line">                <span class="keyword">if</span> (j&gt;=pSize)&#123;</div><div class="line">                    <span class="keyword">return</span> s;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            s+=move[total[s+pSize]];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>我们来一步一步解释</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sunday</span><span class="params">(<span class="keyword">char</span>[] total,<span class="keyword">char</span>[] part)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> tSize = total.length;</div><div class="line">        <span class="keyword">int</span> pSize = part.length;</div><div class="line">        ...</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p>其中<code>total</code>为主串，<code>part</code>为模式串</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">int</span>[] move = <span class="keyword">new</span> <span class="keyword">int</span>[ASCII_SIZE];</div><div class="line">      <span class="comment">//主串参与匹配最末位字符移动到该位需要移动的位数</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i= <span class="number">0</span>;i&lt;ASCII_SIZE;i++)&#123;</div><div class="line">          move[i] = pSize+<span class="number">1</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;pSize;i++)&#123;</div><div class="line">          move[part[i]] = pSize-i;</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<p>定义一个长为ASCII码长度大小的数组，用于存放存入匹配失败时模式串需要移动的长度。这里看到，除了part中不存在的字符，移动长度都直接是模式串长度+1；而part中存在的字符，则需要移动的长度则依次减小。这也很好理解，因为我们匹配的是<code>模式串首部位置+模式串长度+1</code>位置的字母存在于模式串中的位置，这个位置越靠后，则整个模式串需要移动的距离就越短</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">int</span> s = <span class="number">0</span>;<span class="comment">//模式串头部在字符串位置</span></div><div class="line">     </div><div class="line">     <span class="keyword">int</span> j;<span class="comment">//模式串已经匹配了的长度</span></div></pre></td></tr></table></figure>
+<p><code>s</code>为模式串首部在字符串的位置，一开始为0；<code>j</code>是模式串已经匹配了的长度，一开始也是0</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">while</span>(s&lt;=tSize-pSize)&#123; <span class="comment">// 1</span></div><div class="line">          j = <span class="number">0</span>; <span class="comment">// 2</span></div><div class="line">          <span class="keyword">while</span>(total[s+j]==part[j])&#123;<span class="comment">// 3</span></div><div class="line">              j++;<span class="comment">// 4</span></div><div class="line">              <span class="keyword">if</span> (j&gt;=pSize)&#123; </div><div class="line">                  <span class="keyword">return</span> s;<span class="comment">// 5</span></div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">          s+=move[total[s+pSize]]; <span class="comment">// 6</span></div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<p>这里是最关键的代码了，咱们讲细一点</p>
+<ol>
+<li><p>首先循环继续的判定条件为<code>s&lt;=tSize-pSize</code>，<code>s</code>作为模式串首部在字符串的位置，加上<code>pSize</code>肯定要比<code>tSize</code>小，不然就越界了</p>
+</li>
+<li><p><code>j</code>是模式串已经匹配了的长度，匹配开始或者匹配失败后都要给<code>j</code>赋值为0，重新开始计数</p>
+</li>
+<li><p>接下就是一个字符一个字符的比较的循环</p>
+</li>
+<li><p>已经比较成功，则<code>j</code>加1</p>
+</li>
+<li><p>如果<code>j</code>已经大于等于<code>pSize</code>，就返回模式串首部在字符串当前的位置</p>
+</li>
+<li><p>这是最关键的一句，涉及到Sunday算法的核心，也就是模式串在主串中的“跳跃”，我们把这句代码分解一下就好理解的多</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">int</span> nextCompare = s+pSize; <span class="comment">//跳到s+pSize，也就是模式串后的一个字符的位置</span></div><div class="line"><span class="keyword">int</span> ascii_number = total[nextCompare];<span class="comment">//获取转跳后位置的字符的ascii码值</span></div><div class="line"><span class="keyword">int</span> moveLength = move[ascii_number];<span class="comment">//根据ascii码值在move数组中查找模式串需要跳跃的长度</span></div><div class="line">s += moveLength; <span class="comment">//让模式串首部在字符串的位置加上跳跃的长度，完成跳跃</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">String str1 = &quot;searching substring&quot;;</div><div class="line">String str2 = &quot;substr&quot;;</div><div class="line">sunday(str1.toCharArray(),str2.toCharArray());</div></pre></td></tr></table></figure>
+<p>其实最关键的，就是要计算move[]数组中的各个值，我们来手动算一下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">pSize = 6;</div><div class="line">i = 0 : part[i] = s; move[s] = 6;</div><div class="line">i = 1 : part[i] = u; move[u] = 5;</div><div class="line">i = 2 : part[i] = b; move[b] = 4;</div><div class="line">i = 3 : part[i] = s; move[s] = 3;</div><div class="line">i = 4 : part[i] = t; move[t] = 2;</div><div class="line">i = 5 : part[i] = r; move[r] = 1;</div><div class="line"></div><div class="line">final:</div><div class="line">move[s] = 3，</div><div class="line">move[u] = 5, </div><div class="line">move[b] = 4, </div><div class="line">move[s] = 3，</div><div class="line">move[t] = 2, </div><div class="line">move[r] = 1 , </div><div class="line">move[其他] = 7</div></pre></td></tr></table></figure>
+<p>然后进行匹配</p>
+<ol>
+<li><p><code>s = 0, j = 1</code>时，匹配失败</p>
+<p><code>total[s+pSize]</code> = <code>total[6]</code> = <code>i</code></p>
+<p><code>move[i]</code> = 7</p>
+<p><code>s</code>+=7</p>
+<p>待匹配串为<code>ing substring</code></p>
+</li>
+<li><p><code>s = 7 , j = 0 时</code>，匹配失败</p>
+<p><code>total[s+pSize]</code> = <code>total[13]</code> = <code>u</code></p>
+<p><code>move[u]</code> = 5</p>
+<p><code>s</code>+=5</p>
+<p>待匹配串为<code>substring</code></p>
+</li>
+<li><p>匹配成功</p>
+</li>
+</ol>
+<h3 id="Sunday算法的缺点"><a href="#Sunday算法的缺点" class="headerlink" title="Sunday算法的缺点"></a>Sunday算法的缺点</h3><p>看上去简单高效非常美好的Sunday算法，也有一些缺点。因为Sunday算法的核心依赖于move数组，而move数组的值则取决于模式串，那么就可能存在模式串构造出很差的move数组。例如下面一个例子</p>
+<p>主串：baaaabaaaabaaaabaaaa</p>
+<p>模式串：aaaaa</p>
+<p>这个模式串使得move[a]的值为1，即每次匹配失败时，只让模式串向后移动一位再进行匹配。这样就让Sunday算法的时间复杂度飙升到了<code>O(mn)</code>，也就是字符串匹配的最坏情况</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>当然，也不能因为存在最坏的情况就直接否定Sunday算法，大多数情况下，Sunday依然是一个简单高效的算法，值得我们熟练学习掌握。</p>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/01/14/字符串匹配算法之Sunday算法/"
+                     data-title="字符串匹配算法之Sunday算法"
+                     data-url="/2017/01/14/字符串匹配算法之Sunday算法/"
+                     data-images=""
+                     data-content="字符串匹配算法之Sunday算法背景我们第一次接触字符串匹配，想到的肯定是直接用2个循环来遍历... | Aus.Vic.Mel ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/12/12/源码研究之Okhttp/" data-toggle="tooltip" data-placement="top"
+                           title="源码研究之Okhttp">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/01/14/字符串匹配算法之Sunday算法/"
+                         data-title="字符串匹配算法之Sunday算法"
+                         data-url="/2017/01/14/字符串匹配算法之Sunday算法/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串匹配算法之Sunday算法"><span class="toc-text">字符串匹配算法之Sunday算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法解释"><span class="toc-text">算法解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细代码（Java版）"><span class="toc-text">详细代码（Java版）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个例子"><span class="toc-text">一个例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sunday算法的缺点"><span class="toc-text">Sunday算法的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'houskii# 你的多说帐号';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>
