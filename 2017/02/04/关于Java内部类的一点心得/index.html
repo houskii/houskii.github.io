@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        关于Java内部类的一点心得｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2017/02/04/关于Java内部类的一点心得/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>关于Java内部类的一点心得</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2017-02-04
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#JAVA"
+                           title="JAVA">JAVA</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            关于Java内部类的一点心得
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="关于Java内部类的一点心得"><a href="#关于Java内部类的一点心得" class="headerlink" title="关于Java内部类的一点心得"></a>关于Java内部类的一点心得</h2><p>今天看到Jake Wharton大神的一篇演讲稿——<a href="https://realm.io/cn/news/360andev-jake-wharton-java-hidden-costs-android/" target="_blank" rel="external">探索 Java 隐藏的开销</a>，发现自己对Java内部类的认识还是太过于肤浅。在拜读了文章以及自己动手实现后，写下该文来记录一点心得。</p>
+<h3 id="什么是内部类"><a href="#什么是内部类" class="headerlink" title="什么是内部类"></a>什么是内部类</h3><p>内部类（<code>inner class</code>）是定义在另一个类中的类。可以分为3种</p>
+<ul>
+<li>局部内部类</li>
+<li>匿名内部类</li>
+<li>静态内部类</li>
+</ul>
+<p>使用内部类的原因有三点</p>
+<ul>
+<li>内部类方法可以访问该类定义所在的作用域中的数据，包括私有的数据</li>
+<li>内部类可以对同一个包中的其他类隐藏起来</li>
+<li>想要定义一个回调函数且节省代码时，使用匿名(<code>anonymous</code>)内部类比较便捷</li>
+</ul>
+<p>其中局部内部类和匿名内部类是会持有一个外部类的引用，静态内部类不会持有。</p>
+<h3 id="私有变量产生的问题"><a href="#私有变量产生的问题" class="headerlink" title="私有变量产生的问题"></a>私有变量产生的问题</h3><p>使用内部类最大的好处之一，就是可以肆无忌惮地使用外部类的变量，而不用考虑权限问题。但真的是这样么？</p>
+<p>我们都知道内部类编译出来的文件名是<code>&#39;外部类1&#39;$&#39;外部类2&#39;$&#39;...&#39;$&#39;内部类&#39;.class</code>，例如</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span></span>&#123;</div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Inner</span></span>&#123;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$javac Example.java</div><div class="line">$ls</div><div class="line">Example.java  Example.class  Example$Inner.class</div></pre></td></tr></table></figure>
+<p>似乎没有问题，但实际上，<code>$</code>在Java中是可以作为方法/变量/类名存在的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">class $&#123;</div><div class="line">  int $;</div><div class="line">  void $()&#123;&#125;</div><div class="line">&#125;</div><div class="line">// compile success</div></pre></td></tr></table></figure>
+<p>所以实际上，内部类的类名是<code>Example$Inner</code>，而且以包类型(default)的权限存在于项目中。也就是说Java中并不存在内嵌类，所有的类都是独立存在的。</p>
+<p>即</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public class Example&#123;&#125;</div><div class="line">class Example$Inner&#123;&#125;</div></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public class Example&#123;</div><div class="line">  class Inner&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>本质上是相似的，唯一的区别可能就在于内部类会持有一个<code>final</code>类型的<code>Example</code>的实例。我们通过<code>javap &#39;Example$Inner&#39;</code>可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">class Example$Inner &#123;</div><div class="line">  final Example this$0;</div><div class="line">  Example$Inner(Example);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过<code>Example.this</code>拿到这个引用的实例。</p>
+<p>那么下面问题来了：</p>
+<p><strong>内部类是如何访问外部类中私立对象的？</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> var;</div><div class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Inner</span></span>&#123;</div><div class="line">		<span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span>&#123;</div><div class="line">			var++;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面这段代码，按照上面的理论，<code>func()</code>中是肯定无法访问<code>var</code>的，但是编译器并没有报错，运行也是正常的，那么编译器到底做了什么？</p>
+<p>我们通过查看class源码来看看</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$javac Example.java</div><div class="line">$javap -c &apos;Example$Inner&apos;</div><div class="line">Compiled from &quot;Example.java&quot;</div><div class="line">class Example$Inner &#123;</div><div class="line">  final Example this$0;</div><div class="line"></div><div class="line">  Example$Inner(Example);</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: aload_1</div><div class="line">       2: putfield      #1                  // Field this$0:LExample;</div><div class="line">       5: aload_0</div><div class="line">       6: invokespecial #2                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</div><div class="line">       9: return</div><div class="line"></div><div class="line">  void func();</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: getfield      #1                  // Field this$0:LExample;</div><div class="line">       4: invokestatic  #3                  // Method Example.access$008:(LExample;)I</div><div class="line">       7: pop</div><div class="line">       8: return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，在<code>func()</code>方法中访问了<code>Example.access$008</code>这个方法，但是我们并没有写过这个方法，猜想可能是编译器做了什么。然后去查看<code>Example</code>的class源码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$javap -c &apos;Example&apos;</div><div class="line">Compiled from &quot;Example.java&quot;</div><div class="line">public class Example &#123;</div><div class="line">  public Example();</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: invokespecial #2                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</div><div class="line">       4: return</div><div class="line"></div><div class="line">  static int access$008(Example);</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: dup</div><div class="line">       2: getfield      #1                  // Field var:I</div><div class="line">       5: dup_x1</div><div class="line">       6: iconst_1</div><div class="line">       7: iadd</div><div class="line">       8: putfield      #1                  // Field var:I</div><div class="line">      11: ireturn</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>access$008</code>是一个静态方法返回一个<code>int</code>，传入<code>Inner</code>的<code>Example</code>实例，然后方法中访问<code>Example</code>的变量<code>var</code>，实现了自加</p>
+<p>这里终于了解了，内部类访问外部类，因为Java中不存在内嵌类，所以本质上也是外部类访问外部类。而如何访问内部的私有变量/方法？我们通常用一个接口来实现，这里编译器也是这样自动实现。但是内部类中直接大量操作外部类的私有变量，会使得外部类中的方法暴增，比如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public class Example&#123;</div><div class="line">	private int var;</div><div class="line">	class Inner&#123;</div><div class="line">		void func()&#123;</div><div class="line">			var++;</div><div class="line">			var--;</div><div class="line">			++var;</div><div class="line">			--var;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译过后实际上<code>Example</code>会增加4个<code>access</code>方法（也许是因为access方法直接返回操作结束后的变量，每个对变量的操作）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$javap &apos;Example&apos;</div><div class="line">Compiled from &quot;Example.java&quot;</div><div class="line">public class Example &#123;</div><div class="line">  public Example();</div><div class="line">  static int access$008(Example);</div><div class="line">  static int access$010(Example);</div><div class="line">  static int access$004(Example);</div><div class="line">  static int access$006(Example);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这些方法也是导致Android开发中方法数快速达到65535的问题之一；同时<code>t(访问接口) + t(访问变量) &gt; t(访问变量)</code>，这种无用方法变多以后，也会或多或少拖慢程序运行速度</p>
+<h3 id="参数为final的问题"><a href="#参数为final的问题" class="headerlink" title="参数为final的问题"></a>参数为final的问题</h3><p>在Java中，有一点很多人不曾注意的点，即在<strong>方法或作用域内部的内部类所使用的外部变量都必须是final的</strong>。举个例子</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span>&#123;</div><div class="line"> 		<span class="keyword">final</span> <span class="keyword">int</span> var = <span class="number">1</span>;</div><div class="line">       findViewById(R.id.view).setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">           <span class="meta">@Override</span></div><div class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">               System.out.println(var);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果去掉这里的<code>final</code>修饰符，编译器将会提示：</p>
+<blockquote>
+<p>Variable ‘var’ is accessed from inner class ,needs to be declared final</p>
+<p>变量var被内部类使用，需要被声明为final</p>
+</blockquote>
+<p>很多情况下我们都是直接加上<code>final</code>，但并不知道这究竟是为什么</p>
+<p>看上上面我说的内部类问题，因为Java中不存在内嵌类，所以（匿名）子类会被编译成一个单独的类。其中局部变量会以构造函数参数的形式传入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">class TestActivity$1 implement View.OnClickListener&#123;</div><div class="line">  private final TestActivity this$0;</div><div class="line">  private final int var;</div><div class="line">  TestActivity$1(TestActivity this$0,int var)&#123;</div><div class="line">    this.this$0 = this$0;</div><div class="line">    this.var = var;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @Override</div><div class="line">  public void onClick(View v)&#123;</div><div class="line">    System.out.println(var);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看出真正的问题了么？</p>
+<p>在该内部类构造后，所调用的局部变量，基本类型会将自己的值拷贝给内部类实例，引用则会拷贝引用。为了避免：</p>
+<ol>
+<li>外部方法修改引用，而导致内部类得到的引用值不一致 </li>
+<li>内部类修改引用，而导致外部方法的参数值在修改前和修改后不一致。</li>
+</ol>
+<p>而Java又不想挑明自己的做法，干脆修饰成final不可更改类型。</p>
+<blockquote>
+<p>Scala和C#在传入参数中包装了一层，从而让内外部对象保持一致</p>
+</blockquote>
+<p>参考文章</p>
+<p><a href="https://realm.io/cn/news/360andev-jake-wharton-java-hidden-costs-android/" target="_blank" rel="external">探索 Java 隐藏的开销</a></p>
+<p><a href="http://cuipengfei.me/blog/2013/06/22/why-does-it-have-to-be-final/" target="_blank" rel="external">为什么必须是final的呢</a></p>
+<p><a href="https://www.zhihu.com/question/21395848" target="_blank" rel="external">java为什么匿名内部类的参数引用时final？</a></p>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/02/04/关于Java内部类的一点心得/"
+                     data-title="关于Java内部类的一点心得"
+                     data-url="/2017/02/04/关于Java内部类的一点心得/"
+                     data-images=""
+                     data-content="关于Java内部类的一点心得今天看到Jake Wharton大神的一篇演讲稿——探索 Java... | Aus.Vic.Mel ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/01/14/字符串匹配算法之Sunday算法/" data-toggle="tooltip" data-placement="top"
+                           title="字符串匹配算法之Sunday算法">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/02/04/关于Java内部类的一点心得/"
+                         data-title="关于Java内部类的一点心得"
+                         data-url="/2017/02/04/关于Java内部类的一点心得/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于Java内部类的一点心得"><span class="toc-text">关于Java内部类的一点心得</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是内部类"><span class="toc-text">什么是内部类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#私有变量产生的问题"><span class="toc-text">私有变量产生的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数为final的问题"><span class="toc-text">参数为final的问题</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#JAVA"
+                           title="JAVA">JAVA</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'houskii';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/peng-zi-pei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-90368439-1';
+    var _gaDomain = 'houskii.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>

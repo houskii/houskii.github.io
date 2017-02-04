@@ -79,13 +79,13 @@
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/tags/">Articles</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/tags/">Articles</a>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
@@ -179,7 +179,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="字符串匹配算法之Sunday算法"><a href="#字符串匹配算法之Sunday算法" class="headerlink" title="字符串匹配算法之Sunday算法"></a>字符串匹配算法之Sunday算法</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>我们第一次接触字符串匹配，想到的肯定是直接用2个循环来遍历，这样代码虽然简单，但时间复杂度却是<code>Ω(mn)</code>，也就是达到了字符串匹配效率的下限。于是后来人经过研究，构造出了著名的KMP算法（Knuth-Morris-Pratt算法），让我们的时间复杂度降低到了<code>O(m+n)</code>，但现代文字处理器中，却很少使用KMP算法来做字符串匹配，因为还是太慢了。现在主流的算法是BM算法（Boyer-Moore算法），成功让平均时间复杂度降低到了<code>O(m/n)</code>，而Sunday算法，则是对BM算法的进一步小幅优化。</p>
+                <h2 id="字符串匹配算法之Sunday算法"><a href="#字符串匹配算法之Sunday算法" class="headerlink" title="字符串匹配算法之Sunday算法"></a>字符串匹配算法之Sunday算法</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>我们第一次接触字符串匹配，想到的肯定是直接用2个循环来遍历，这样代码虽然简单，但时间复杂度却是<code>Ω(m*n)</code>，也就是达到了字符串匹配效率的下限。于是后来人经过研究，构造出了著名的KMP算法（Knuth-Morris-Pratt算法），让我们的时间复杂度降低到了<code>O(m+n)</code>，但现代文字处理器中，却很少使用KMP算法来做字符串匹配，因为还是太慢了。现在主流的算法是BM算法（Boyer-Moore算法），成功让平均时间复杂度降低到了<code>O(m/n)</code>，而Sunday算法，则是对BM算法的进一步小幅优化。</p>
 <p>KMP算法很多人看了一遍遍以后，对<code>next[n]</code>数组的理解还是有点困难（包括笔者），写代码的时候总是容易变成这种情况（/捂脸.jpg）：</p>
 <blockquote>
 <p>（切到网页）：马冬梅</p>
@@ -254,7 +254,7 @@
 <h3 id="Sunday算法的缺点"><a href="#Sunday算法的缺点" class="headerlink" title="Sunday算法的缺点"></a>Sunday算法的缺点</h3><p>看上去简单高效非常美好的Sunday算法，也有一些缺点。因为Sunday算法的核心依赖于move数组，而move数组的值则取决于模式串，那么就可能存在模式串构造出很差的move数组。例如下面一个例子</p>
 <p>主串：baaaabaaaabaaaabaaaa</p>
 <p>模式串：aaaaa</p>
-<p>这个模式串使得move[a]的值为1，即每次匹配失败时，只让模式串向后移动一位再进行匹配。这样就让Sunday算法的时间复杂度飙升到了<code>O(mn)</code>，也就是字符串匹配的最坏情况</p>
+<p>这个模式串使得move[a]的值为1，即每次匹配失败时，只让模式串向后移动一位再进行匹配。这样就让Sunday算法的时间复杂度飙升到了<code>O(m*n)</code>，也就是字符串匹配的最坏情况</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>当然，也不能因为存在最坏的情况就直接否定Sunday算法，大多数情况下，Sunday依然是一个简单高效的算法，值得我们熟练学习掌握。</p>
 
                 <hr>
@@ -283,6 +283,11 @@
                 
 
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/04/关于Java内部类的一点心得/" data-toggle="tooltip" data-placement="top"
+                           title="关于Java内部类的一点心得">&larr; Previous Post</a>
+                    </li>
                     
                     
                     <li class="next">
