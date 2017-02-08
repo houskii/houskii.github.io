@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        JavaSE集合框架整理｜Aus.Vic.Mel
+        Kotlin关键字总结｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2016/09/22/JavaSE集合框架整理/">
+    <link rel="canonical" href="/2017/02/08/Kotlin关键字总结/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,18 +148,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>JavaSE集合框架整理</h1>
+                    <h1>Kotlin关键字总结</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2016-09-22
+                          日期 2017-02-08
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#JAVA"
-                           title="JAVA">JAVA</a>
+                        <a class="tag" href="/tags/#Kotlin"
+                           title="Kotlin">Kotlin</a>
                         
                     </div>
                 </div>
@@ -168,7 +168,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            JavaSE集合框架整理
+            Kotlin关键字总结
         </span>
     </div>
 </header>
@@ -179,52 +179,120 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="JavaSE集合框架整理"><a href="#JavaSE集合框架整理" class="headerlink" title="JavaSE集合框架整理"></a>JavaSE集合框架整理</h1><h3 id="Java集合框架结构图"><a href="#Java集合框架结构图" class="headerlink" title="Java集合框架结构图"></a>Java集合框架结构图</h3><p> <img src="/images/java_all_collection.png" alt="java_all_collection"></p>
-<p>大体分为<code>Collection</code>和<code>Map</code></p>
-<p>以下源代码基于JDK 8</p>
-<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p><strong>继承自<code>AbstractList&lt;E&gt;</code>，实现了<code>Cloneable</code>、<code>Serializable</code>和<code>RandomAccess</code></strong></p>
-<p>最小增量为10（在Android SDK下为12）</p>
-<p>每次扩容时，容量变为原来的1.5倍</p>
-<p>ArrayList使用一个用<code>transient</code>关键字修饰的<code>Object[]</code>数组来储存具体数据，当其序列化时，按照数组实际长度将数据写入流中（而非将数组直接装入流，这样避免写入数组中的空位，节省内存空间）</p>
-<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p><strong>继承自<code>AbstractMap&lt;K,V&gt;</code>，实现了<code>Cloneable</code>和<code>Serializable</code></strong></p>
-<p>最小容量为16，最大容量为2^30（1&lt;&lt;30）</p>
-<p>默认装载因子为0.75</p>
-<p>使用一个用<code>transient</code>关键字修饰的<code>Node[]</code>（<code>HashMapEntry[]</code>）数组<code>table</code>来储存数据，<code>doubleCapacity()</code>函数来扩容。（Android SDK）</p>
+                <h2 id="Kotlin关键字总结"><a href="#Kotlin关键字总结" class="headerlink" title="Kotlin关键字总结"></a>Kotlin关键字总结</h2><ul>
+<li><p>val</p>
+<p>只读属性</p>
+<p>​</p>
+</li>
+<li><p>var</p>
+<p>​可变属性</p>
+<p>​</p>
+</li>
+<li><p>const</p>
+<p>编译时常量，需要满足</p>
 <ul>
-<li><code>put()</code>函数先判断<code>value</code>是否为空，然后用<code>key</code>获取<code>index</code>，用循环判断该<code>index</code>下值是否已存在，接着判断目前<code>table</code>容量大小，最后<code>new HashMapEntry(key, value, hash, index)</code>存入。存入时若当前<code>key</code>内已存在值，则将新<code>Entry</code>的<code>next</code>指向老<code>Entry</code></li>
-<li><code>remove()</code>函数，先判断<code>key</code>是否为空，然后用<code>key</code>获取<code>index</code>，然后按照删除单向链表的的思路删除整个<code>Entry</code>链</li>
+<li>以String或基本类型进行初始化</li>
+<li>没有自定义getter</li>
+<li>对象成员或顶级（Top-level）</li>
 </ul>
-<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><h4 id="HashMapEntry（Android-SDK）"><a href="#HashMapEntry（Android-SDK）" class="headerlink" title="//HashMapEntry（Android-SDK）"></a>//HashMapEntry（Android-SDK）</h4><p>类似一个指针，参数有<code>K key</code>、<code>V value</code>、<code>final int hash</code>与<code>HashMapEntry&lt;K,V&gt; next</code></p>
-<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p><strong>继承自<code>AbstractSequentialList</code>，实现了<code>List&lt;E&gt;</code>，<code>Deque&lt;E&gt;</code>，<code>Queue&lt;E&gt;</code>，<code>Cloneable</code>、<code>Serializable</code></strong></p>
-<p>类似于双向链表，用内部类<code>Link</code>来存放实例与前后对象的引用，</p>
-<p>//<code>voidLink</code>存放首节点。（Android SDK）</p>
-<p>有<code>first</code>和<code>last</code>来存放首尾节点</p>
-<p>执行<code>clear()</code>操作时，直接让首节点指向自己，其他部分等待GC回收</p>
-<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><p>有首尾节点的链表，存入的<code>&lt;K,V&gt;</code>按顺序存入读取。同时每一个<code>Node</code>都有对上一个元素<code>before</code>和下一个元素<code>after</code>的引用</p>
-<p>可以实现LRU</p>
-<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p><strong>继承自<code>AbstractSet</code>，实现了<code>Set&lt;E&gt;</code>、<code>Cloneable</code>和<code>Serializable</code></strong></p>
-<p>内部用<code>HashMap</code>实现，将存入的<code>Object</code>作为key存入</p>
-<h3 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h3><p><strong>继承自<code>Dictionary</code>，实现了<code>Map&lt;K,V&gt;</code>、<code>Cloneable</code>、<code>Serializable</code></strong></p>
-<p>最小容量为16，最大容量为2^30，空的HashMap容量为2</p>
-<p>默认装载因子为0.75</p>
-<p>与<code>HashMap</code>最大的不同点在于不少方法加上了<code>Synchronized</code>关键字，其余均类似</p>
-<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>默认容量16</p>
-<p>结构中包含默认容量的<code>Segment</code>（<code>Segment</code>继承了<code>ReentrantLock</code>），每个<code>Segment</code>又包含若干个散列表的<code>bucket</code>，每个<code>bucket</code>维护一个<code>HashEntry</code>链表</p>
-<p>仅对<code>put()</code>中对<code>Node</code>的操作加锁，使程序可以并发访问多个<code>Segment</code>，而<code>HashEntry</code>中对<code>value</code>和<code>next</code>加了<code>volitale</code>关键字，使其在整个内存中可见</p>
-<h3 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h3><p>HashMap中的<code>Entry&lt;K,V&gt;</code>继承了`WeakReference<v>``</v></p>
+<p>​</p>
+</li>
+<li><p>lateinit</p>
+<p>延迟初始化属性</p>
+<p>只能被用在类的var类的可变属性定义中，不能用在构造方法中，属性不能有自定义setter/getter，属性类型非空，也不能为基本类型</p>
+<p>​</p>
+</li>
+<li><p>field</p>
+<p>备用字段</p>
+<p>​</p>
+</li>
+<li><p>data</p>
+<p>​数据类，编译器会自动添加<code>equals</code>/<code>hashCode</code>/<code>toString()</code>/<code>copy()</code>方法</p>
+<ul>
+<li>主构造函数应该至少有一个参数</li>
+<li>主构造函数的所有参数必须标注为<code>val</code>或者<code>var</code></li>
+<li>数据类不能是<code>abstract</code>/<code>open</code>/<code>sealed</code>/<code>inner</code></li>
+<li>不能继承其他类（可以实现接口）</li>
+<li>JVM中如果构造函数是无参的，则所有属性必须有默认的值</li>
+</ul>
+<p>​</p>
+</li>
+<li><p>open</p>
+<p>允许别的类继承这个类</p>
+<p>默认情况下，kotlin中所有的类都是final的</p>
+<p>​</p>
+</li>
+<li><p>public</p>
+<p>在任何地方可见</p>
+<p>​</p>
+</li>
+<li><p>protected</p>
+<p>和private大体相似，但在子类中也可见</p>
+<p>​</p>
+</li>
+<li><p>private</p>
+<p>只在该类（以及它的成员）中可见</p>
+<p>​</p>
+</li>
+<li><p>internal</p>
+<p>在本模块的所有可以访问到声明区域的均可以访问该类的所有internal成员</p>
+<p>​</p>
+</li>
+<li><p>interface</p>
+<p>接口，同Java</p>
+<p>接口的方法可以有自己的实现，可以有属性但必须是抽象的、或提供访问器的实现</p>
+<p>​</p>
+</li>
+<li><p>abstract</p>
+<p>抽象类，同Java</p>
+<p>​</p>
+</li>
+<li><p>final</p>
+<p>同Java​</p>
+<p>​</p>
+</li>
+<li><p>override</p>
+<p>复写父类的函数，如果不加则非法</p>
+<p>​</p>
+</li>
+<li><p>constructor</p>
+<p>一个类可以有一个主构造函数以及多个二级构造函数</p>
+<p>如果主构造函数没有注解或者可见性说明，constructor关键字是可以省略</p>
+<p>​</p>
+</li>
+<li><p>sealed</p>
+<p>类名关键字，密封类，值只能是有限集合中的某种类型，相当于是一个枚举类的扩展。密封类可以有子类但必须全部嵌套在密封类内部声明</p>
+<p>​</p>
+</li>
+<li><p>inner</p>
+<p>类可以标记为<code>inner</code>这样就可以访问外部类的成员，拥有外部类的一个对象引用</p>
+<p>​</p>
+</li>
+<li><p>enum</p>
+<p>枚举类，同Java</p>
+</li>
+</ul>
 
                 <hr>
                 
                 <!-- 多说 Share start -->
                 <div class="ds-share"
                      style="text-align: right"
-                     data-thread-key="2016/09/22/JavaSE集合框架整理/"
-                     data-title="JavaSE集合框架整理"
-                     data-url="/2016/09/22/JavaSE集合框架整理/"
+                     data-thread-key="2017/02/08/Kotlin关键字总结/"
+                     data-title="Kotlin关键字总结"
+                     data-url="/2017/02/08/Kotlin关键字总结/"
                      data-images=""
-                     data-content="JavaSE集合框架整理Java集合框架结构图 
-大体分为Collection和Map
-以下源... | Aus.Vic.Mel ">
+                     data-content="Kotlin关键字总结
+val
+只读属性
+​
+
+var
+​可变属性
+​
+
+const
+编译时常... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -242,15 +310,10 @@
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2016/09/24/总结一下Hexo-Github以及Wordpress搭博客/" data-toggle="tooltip" data-placement="top"
-                           title="总结一下Hexo+Github以及Wordpress搭博客">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2016/09/11/《深入理解Java虚拟机》读书笔记/" data-toggle="tooltip" data-placement="top"
-                           title="《深入理解Java虚拟机》读书笔记">Next Post &rarr;</a>
+                        <a href="/2017/02/04/关于Java内部类的一点心得/" data-toggle="tooltip" data-placement="top"
+                           title="关于Java内部类的一点心得">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -259,9 +322,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                         data-thread-key="2016/09/22/JavaSE集合框架整理/"
-                         data-title="JavaSE集合框架整理"
-                         data-url="/2016/09/22/JavaSE集合框架整理/">
+                         data-thread-key="2017/02/08/Kotlin关键字总结/"
+                         data-title="Kotlin关键字总结"
+                         data-url="/2017/02/08/Kotlin关键字总结/">
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -273,7 +336,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaSE集合框架整理"><span class="toc-text">JavaSE集合框架整理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java集合框架结构图"><span class="toc-text">Java集合框架结构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayList"><span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashMap"><span class="toc-text">HashMap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Node"><span class="toc-text">Node</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HashMapEntry（Android-SDK）"><span class="toc-text">//HashMapEntry（Android-SDK）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedList"><span class="toc-text">LinkedList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkedHashMap"><span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashSet"><span class="toc-text">HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HashTable"><span class="toc-text">HashTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ConcurrentHashMap"><span class="toc-text">ConcurrentHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WeakHashMap"><span class="toc-text">WeakHashMap</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Kotlin关键字总结"><span class="toc-text">Kotlin关键字总结</span></a></li></ol>
                 </div>
             </div>
         </div>
@@ -295,8 +358,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#JAVA"
-                           title="JAVA">JAVA</a>
+                        <a class="tag" href="/tags/#Kotlin"
+                           title="Kotlin">Kotlin</a>
                         
                     </div>
                 </section>
