@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="So Where are You?">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/images/red.png">
+    <link rel="alternate" type="application/atom+xml" title="Houskii" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        记最近配置环境时碰到的坑｜Aus.Vic.Mel
+        
+    </title>
+
+    <link rel="canonical" href="/2017/02/17/记最近配置环境时碰到的坑/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Houskii
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">Articles</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://www.3dnew.com/tp/20130310/xpic8316.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://www.3dnew.com/tp/20130310/xpic8316.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>记最近配置环境时碰到的坑</h1>
+                    
+                    <span class="meta">
+                         作者 Houskii
+                        <span>
+                          日期 2017-02-17
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#总结"
+                           title="总结">总结</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            记最近配置环境时碰到的坑
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="记最近配置环境时碰到的坑"><a href="#记最近配置环境时碰到的坑" class="headerlink" title="记最近配置环境时碰到的坑"></a>记最近配置环境时碰到的坑</h2><p>最近一直在看kotlin的东西，然后参考了大帅MarkZhai的<a href="http://blog.zhaiyifan.cn/categories/Android-Project-From-0/" target="_blank" rel="external">从零开始的Android新项目</a>尝试自己按照实际开发的流程去写点东西，结果配置环境的时候碰到了一些坑，在这里记录一下做个总结</p>
+<ul>
+<li><h3 id="坑1：Kotlin-DataBinding"><a href="#坑1：Kotlin-DataBinding" class="headerlink" title="坑1：Kotlin+DataBinding"></a>坑1：Kotlin+DataBinding</h3><p>写demo的时候发现DataBinding无法解析出layout中Kotlin的数据类，但是用Java版本是没问题，一开始怀疑DataBinding不支持Kt，但是问了一下大精Wing，发现他的项目里面是正常使用的没什么问题。然后就只能自己找问题了……</p>
+<p>我当时的grade是这样的</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><div class="line"><span class="comment">//项目的gradle</span></div><div class="line">buildscript &#123;</div><div class="line">    ext.kotlin_version = <span class="string">'1.0.6'</span></div><div class="line">  	dependencies&#123;</div><div class="line">      classpath <span class="string">'com.neenbedankt.gradle.plugins:android-apt:1.8'</span></div><div class="line">      classpath <span class="string">"org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"</span></div><div class="line">        classpath <span class="string">"org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"</span></div><div class="line">  	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//模块的gradle</span></div><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></div><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.neenbedankt.android-apt'</span></div><div class="line">apply <span class="string">plugin:</span> <span class="string">'kotlin-android-extensions'</span></div><div class="line">...</div><div class="line">dependencies&#123;</div><div class="line">  	...</div><div class="line">    compile ext.libKotlin</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在网上看到别人告诉我kotlin用的apt是kapt，所以要单独加上，然后我就改了app的gradle</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</div><div class="line">apply plugin: &apos;kotlin-android-extensions&apos;</div><div class="line"></div><div class="line">kapt &#123;</div><div class="line">    generateStubs = true</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies&#123;</div><div class="line">  ...</div><div class="line">  kapt com.android.databinding:compiler:$android_plugin_version</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>依然报错，又找了好久，发现在StackOverFlow上有这样一句话，我翻译一下：</p>
+<blockquote>
+<p>当kotlin和java都要使用apt时，应当仅使用kapt</p>
+</blockquote>
+<p>好家伙，然而当我把android的apt注销掉，还是报错。。。。。。</p>
+<p>对比了一下别人成功的Kotlin+Databinding配置，我又把<code>&#39;kotlin-android-extensions&#39;</code>改成了<code>&#39;kotlin-android&#39;</code>，最后变成了这样</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">//模块的gradle</div><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line">apply plugin: &apos;kotlin-android&apos;</div><div class="line"></div><div class="line">android&#123;</div><div class="line">  ...</div><div class="line">  databinding&#123;</div><div class="line">    enabled = true</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">kapt &#123;</div><div class="line">    generateStubs = true</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies&#123;</div><div class="line">   	compile ext.libKotlin</div><div class="line">    kapt ext.libKapt</div><div class="line">&#125;</div><div class="line"></div><div class="line">//项目的gradle</div><div class="line">buildscript &#123;</div><div class="line"></div><div class="line">    ext.kotlin_version = &apos;1.0.6&apos;</div><div class="line">    ext.android_plugin_version = &apos;2.2.0&apos;</div><div class="line">    ...</div><div class="line">    dependencies &#123;</div><div class="line">        ...</div><div class="line">        classpath &quot;org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version&quot;</div><div class="line">        classpath &quot;org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">ext&#123;</div><div class="line">	...</div><div class="line">	libKapt = &quot;com.android.databinding:compiler:$android_plugin_version&quot;</div><div class="line">    libKotlin =&quot;org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​</p>
+<p>终于可以通过编译了。。。</p>
+<p>​</p>
+</li>
+</ul>
+<ul>
+<li><h3 id="坑2：dex-cannot-parse-version-52-byte-code"><a href="#坑2：dex-cannot-parse-version-52-byte-code" class="headerlink" title="坑2：dex cannot parse version 52 byte code"></a>坑2：dex cannot parse version 52 byte code</h3><p>年轻的我以为这样就结束了，然而并没有。编译确实通过了，但是运行时却爆出这样一段话</p>
+<blockquote>
+<p>Error:Error converting bytecode to dex:</p>
+<p>Cause: Dex cannot parse version 52 byte code. This is caused by library dependencies that have been compiled using Java 8 or above. If you are using the ‘java’ gradle plugin in a library submodule add targetCompatibility = ‘1.7’ sourceCompatibility = ‘1.7’ to that submodule’s build.gradle file.</p>
+</blockquote>
+<p>网上找了一圈，大多都是这样的解决方案</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">//在项目的gradle中</div><div class="line">allprojects &#123;</div><div class="line">    tasks.withType(JavaCompile) &#123;</div><div class="line">        sourceCompatibility = &quot;1.7&quot;</div><div class="line">        targetCompatibility = &quot;1.7&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">//模块的gradle</div><div class="line">android&#123;</div><div class="line">  ...</div><div class="line">  compileOptions &#123;</div><div class="line">    sourceCompatibility JavaVersion.VERSION_1_7</div><div class="line">    targetCompatibility JavaVersion.VERSION_1_7</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://img.askci.com/images/news/2015/6/8/667312c2-7017-4c3b-a9e0-a12c21a749e4.jpg" alt="但是并没有什么卵用"></p>
+<p>再看看错误，说是有模块使用了Java8，那么我就干脆把整个工程改成Java8，Android中使用Java8的话就必须要使用Jack&amp;Jill编译器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">android&#123;</div><div class="line"> defaultConfig&#123;</div><div class="line">    jackOptions&#123;</div><div class="line">      enabled = true</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  ...</div><div class="line">  compileOptions &#123;</div><div class="line">    sourceCompatibility JavaVersion.VERSION_1_8</div><div class="line">    targetCompatibility JavaVersion.VERSION_1_8</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>还是不行，不过这次错误原因却不同了。在网上贴了错误代码后，在JakeWharton大神的Github中，发现有人提到了同样的问题，而JakeWharton大神的回复是：目前Jack编译器不支持apt 。。。</p>
+<p>实在没办法了，只能去看看哪个包那么贱上了Java8</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ext&#123;</div><div class="line">    supportVersion = &quot;25.1.0&quot;</div><div class="line">    retrofitVersion = &quot;2.1.0&quot;</div><div class="line">    leakCanaryVersion = &quot;1.5&quot;</div><div class="line">    blockCanaryVersion = &quot;1.4.1&quot;</div><div class="line">    daggerVersion = &quot;2.9&quot;</div><div class="line"></div><div class="line">    libSupportAppcompat = &quot;com.android.support:appcompat-v7:$&#123;supportVersion&#125;&quot;</div><div class="line">    libSupportDesign = &quot;com.android.support:design:$&#123;supportVersion&#125;&quot;</div><div class="line">    libSupportV4 = &quot;com.android.support:support-v4:$&#123;supportVersion&#125;&quot;</div><div class="line"></div><div class="line">    libGson = &quot;com.google.code.gson:gson:2.4&quot;</div><div class="line">    libRetrofit = &quot;com.squareup.retrofit2:retrofit:$&#123;retrofitVersion&#125;&quot;</div><div class="line">    libRetrofitConverterGson = &quot;com.squareup.retrofit2:converter-gson:$&#123;retrofitVersion&#125;&quot;</div><div class="line">    libRetrofitAdapterRxJava = &quot;com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0&quot;</div><div class="line"></div><div class="line">    libRxJava2 = &quot;io.reactivex.rxjava2:rxjava:2.0.5&quot;</div><div class="line">    libRxAndroid = &quot;io.reactivex.rxjava2:rxandroid:2.0.1&quot;</div><div class="line">    libEventBus = &quot;org.greenrobot:eventbus:3.0.0&quot;</div><div class="line"></div><div class="line">    libDagger = &quot;com.google.dagger:dagger:$&#123;daggerVersion&#125;&quot;</div><div class="line">    libDaggerCompiler = &quot;com.google.dagger:dagger-compiler:$&#123;daggerVersion&#125;&quot;</div><div class="line"></div><div class="line">    libGlide = &quot;com.github.bumptech.glide:glide:3.7.0&quot;</div><div class="line"></div><div class="line">    libKapt = &quot;com.android.databinding:compiler:$android_plugin_version&quot;</div><div class="line">    libKotlin =&quot;org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion&quot;</div><div class="line">    libKotlinReflect = &quot;org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion&quot;</div><div class="line"></div><div class="line">    debugDependencies = [</div><div class="line">            leakCanary: &quot;com.squareup.leakcanary:leakcanary-android:$&#123;leakCanaryVersion&#125;&quot;,</div><div class="line">            blockCanary: &quot;com.github.markzhai:blockcanary-android:$&#123;blockCanaryVersion&#125;&quot;,</div><div class="line">    ]</div><div class="line"></div><div class="line">    releaseDependencies = [</div><div class="line">            leakCanary: &quot;com.squareup.leakcanary:leakcanary-android-no-op:$&#123;leakCanaryVersion&#125;&quot;,</div><div class="line">            blockCanary: &quot;com.github.markzhai:blockcanary-android:$&#123;blockCanaryVersion&#125;&quot;,</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>找到最后发现，原来是<code>dagger-compiler</code>模块……因为我是直接去github拿的版本号，那么问题就可能是在<code>compiler</code>中使用了lambda或者别的特性，把<code>daggerVersion</code>换成<code>2.0.2</code>后，编译终于通过了，app也可以成功运行了。</p>
+<p>至于如何找到这个包出了问题，因为有个算法叫折半查找（逃</p>
+</li>
+</ul>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/02/17/记最近配置环境时碰到的坑/"
+                     data-title="记最近配置环境时碰到的坑"
+                     data-url="/2017/02/17/记最近配置环境时碰到的坑/"
+                     data-images=""
+                     data-content="记最近配置环境时碰到的坑最近一直在看kotlin的东西，然后参考了大帅MarkZhai的从零开... | Aus.Vic.Mel ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/08/Kotlin关键字总结/" data-toggle="tooltip" data-placement="top"
+                           title="Kotlin关键字总结">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/02/17/记最近配置环境时碰到的坑/"
+                         data-title="记最近配置环境时碰到的坑"
+                         data-url="/2017/02/17/记最近配置环境时碰到的坑/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#记最近配置环境时碰到的坑"><span class="toc-text">记最近配置环境时碰到的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#坑1：Kotlin-DataBinding"><span class="toc-text">坑1：Kotlin+DataBinding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#坑2：dex-cannot-parse-version-52-byte-code"><span class="toc-text">坑2：dex cannot parse version 52 byte code</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#总结"
+                           title="总结">总结</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'houskii';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/peng-zi-pei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/houskii">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Houskii 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-90368439-1';
+    var _gaDomain = 'houskii.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/red.png">
+</body>
+
+</html>
