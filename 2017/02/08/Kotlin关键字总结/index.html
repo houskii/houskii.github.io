@@ -79,13 +79,13 @@
                     
                         
                         <li>
-                            <a href="/tags/">Articles</a>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/tags/">Articles</a>
                         </li>
                         
                     
@@ -179,13 +179,14 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="Kotlin关键字总结"><a href="#Kotlin关键字总结" class="headerlink" title="Kotlin关键字总结"></a>Kotlin关键字总结</h2><ul>
+                <ul>
+<li><h2 id="Kotlin关键字总结"><a href="#Kotlin关键字总结" class="headerlink" title="Kotlin关键字总结"></a>Kotlin关键字总结</h2><ul>
 <li><p>val</p>
 <p>只读属性</p>
 <p>​</p>
 </li>
 <li><p>var</p>
-<p>​可变属性</p>
+<p>可变属性</p>
 <p>​</p>
 </li>
 <li><p>const</p>
@@ -199,7 +200,7 @@
 </li>
 <li><p>lateinit</p>
 <p>延迟初始化属性</p>
-<p>只能被用在类的var类的可变属性定义中，不能用在构造方法中，属性不能有自定义setter/getter，属性类型非空，也不能为基本类型</p>
+<p>只能被用在类的var可变属性定义中，不能用在构造方法中，属性不能有自定义setter/getter，属性类型非空，也不能为基本类型</p>
 <p>​</p>
 </li>
 <li><p>field</p>
@@ -207,7 +208,7 @@
 <p>​</p>
 </li>
 <li><p>data</p>
-<p>​数据类，编译器会自动添加<code>equals</code>/<code>hashCode</code>/<code>toString()</code>/<code>copy()</code>方法</p>
+<p>数据类，编译器会自动添加<code>equals</code>/<code>hashCode</code>/<code>toString()</code>/<code>copy()</code>方法</p>
 <ul>
 <li>主构造函数应该至少有一个参数</li>
 <li>主构造函数的所有参数必须标注为<code>val</code>或者<code>var</code></li>
@@ -248,7 +249,7 @@
 <p>​</p>
 </li>
 <li><p>final</p>
-<p>同Java​</p>
+<p>同Java</p>
 <p>​</p>
 </li>
 <li><p>override</p>
@@ -270,6 +271,22 @@
 </li>
 <li><p>enum</p>
 <p>枚举类，同Java</p>
+<p>​</p>
+</li>
+<li><p>companion</p>
+<p>伴生对象，可以使用类名作为修饰符调用伴生对象的成员。伴生对象的名字可以被省略，因为在调用伴生对象成员时不涉及伴生对象的名字，这种情况下在使用伴生对象时用<strong>Companion</strong>替代伴生对象名</p>
+<p>伴生对象看起来像其它语言中的静态成员，但是在运行时他们仍然是<strong>对象</strong>的实例成员，并且可以实现接口</p>
+<p>​</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>object</p>
+<p>Kotlin用对象表达式和对象声明实现Java匿名内部类这种情况，即匿名类的实现对象为object</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">object:OnClickListener&#123;</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过这种方式，我们可以很轻松地实现单例</p>
+<p>如果<strong>object</strong>关键字后面有名字，它不再是一个表达式。不能将它赋值给变量，但是我们可以通过他的名字引用它。这样的对象可以拥有超类</p>
 </li>
 </ul>
 
@@ -282,13 +299,14 @@
                      data-title="Kotlin关键字总结"
                      data-url="/2017/02/08/Kotlin关键字总结/"
                      data-images=""
-                     data-content="Kotlin关键字总结
+                     data-content="
+Kotlin关键字总结
 val
 只读属性
 ​
 
 var
-​可变属性
+可变属性
 ​
 
 const
