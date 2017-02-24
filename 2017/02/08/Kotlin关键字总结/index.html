@@ -79,13 +79,13 @@
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/tags/">Articles</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/tags/">Articles</a>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
@@ -179,8 +179,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <ul>
-<li><h2 id="Kotlin关键字总结"><a href="#Kotlin关键字总结" class="headerlink" title="Kotlin关键字总结"></a>Kotlin关键字总结</h2><ul>
+                <h2 id="Kotlin关键字总结"><a href="#Kotlin关键字总结" class="headerlink" title="Kotlin关键字总结"></a>Kotlin关键字总结</h2><ul>
 <li><p>val</p>
 <p>只读属性</p>
 <p>​</p>
@@ -279,14 +278,48 @@
 <p>​</p>
 </li>
 </ul>
-</li>
-</ul>
 <ul>
 <li><p>object</p>
 <p>Kotlin用对象表达式和对象声明实现Java匿名内部类这种情况，即匿名类的实现对象为object</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">object:OnClickListener&#123;</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过这种方式，我们可以很轻松地实现单例</p>
 <p>如果<strong>object</strong>关键字后面有名字，它不再是一个表达式。不能将它赋值给变量，但是我们可以通过他的名字引用它。这样的对象可以拥有超类</p>
+<p>​</p>
+</li>
+<li><p>@</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">var a = this@A</div></pre></td></tr></table></figure>
+<p>表示a为A的引用（内部类中明确引用）</p>
+<p>​</p>
+</li>
+<li><p>as</p>
+<p>类型转换</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">y as String</div></pre></td></tr></table></figure>
+<p>将y转换为String类型</p>
+<p>​</p>
+</li>
+<li><p>is</p>
+<p>即instance，类型检查</p>
+<p>​</p>
+</li>
+<li><p>out</p>
+<p>​</p>
+</li>
+<li><p>?.</p>
+<p>安全调用</p>
+<p>b?.length，b为空时返回null，否则返回Int?</p>
+<p>​</p>
+</li>
+<li><p>!.</p>
+<p>b!.length，要求b不能为空，否则编译错误</p>
+<p>​</p>
+</li>
+<li><p>!!.</p>
+<p>b!!.length，返回一个非空对象(Int?)或者抛出一个NPE</p>
+<p>​</p>
+</li>
+<li><p>?;</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">var l = b.length()?:-1</div></pre></td></tr></table></figure>
+<p>左边表达式不为空时返回表达式的结果，否则返回右边的值</p>
 </li>
 </ul>
 
@@ -299,8 +332,7 @@
                      data-title="Kotlin关键字总结"
                      data-url="/2017/02/08/Kotlin关键字总结/"
                      data-images=""
-                     data-content="
-Kotlin关键字总结
+                     data-content="Kotlin关键字总结
 val
 只读属性
 ​
@@ -310,7 +342,7 @@ var
 ​
 
 const
-编译时常... | Aus.Vic.Mel ">
+编译时常量... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
