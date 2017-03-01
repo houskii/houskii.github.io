@@ -79,13 +79,13 @@
                     
                         
                         <li>
-                            <a href="/tags/">Articles</a>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/tags/">Articles</a>
                         </li>
                         
                     
@@ -179,10 +179,13 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="操作系统复习"><a href="#操作系统复习" class="headerlink" title="操作系统复习"></a>操作系统复习</h2><ul>
+                <ul>
+<li><h3 id="操作系统复习"><a href="#操作系统复习" class="headerlink" title="操作系统复习"></a>操作系统复习</h3><ul>
 <li><h3 id="线程与进程"><a href="#线程与进程" class="headerlink" title="线程与进程"></a>线程与进程</h3><ul>
 <li><p>进程与线程的定义？区别？</p>
+<p>进程是操作系统内可独立调度和资源分配的基本单位</p>
 <p>​</p>
+<p>线程是进程的子集，一个进程由多个线程组成​</p>
 </li>
 <li><p>进程间的通信IPC</p>
 <p><strong>临界区</strong></p>
@@ -205,7 +208,7 @@
 <p><strong>消息传递</strong></p>
 <p>​</p>
 <p><strong>屏障</strong></p>
-<p>当一个进程到达屏障时，它就被屏障阻拦，直到所有进程都到达该屏障为止。​</p>
+<p>当一个进程到达屏障时，它就被屏障阻拦，直到所有进程都到达该屏障为止。</p>
 </li>
 <li><p>调度</p>
 <p>​</p>
@@ -218,21 +221,21 @@
 <li><p>页面置换算法</p>
 <ul>
 <li><p>最优页面置换算法（不可实现）</p>
-<p><img src="images/缺页中断-OPT.png" alt="缺页中断-OPT"></p>
+<p><img src="/images/缺页中断-OPT.png" alt="缺页中断-OPT"></p>
 </li>
 <li><p>最近未使用页面置换算法（NRU）</p>
 </li>
 <li><p>先进先出页面置换算法（FIFO）</p>
-<p><img src="images/缺页中断-FIFO.png" alt="缺页中断-FIFO"></p>
+<p><img src="/images/缺页中断-FIFO.png" alt="缺页中断-FIFO"></p>
 <p>注意：belady异常</p>
-<p><img src="images/FIFO-Belady.png" alt="FIFO-Belady"></p>
+<p><img src="/images/FIFO-Belady.png" alt="FIFO-Belady"></p>
 </li>
 <li><p>第二次机会页面置换算法</p>
 </li>
 <li><p>时钟页面置换算法</p>
 </li>
 <li><p>最近最少使用页面置换算法（LRU）</p>
-<p><img src="images/缺页中断-LRU.png" alt="缺页中断-LRU"></p>
+<p><img src="/images/缺页中断-LRU.png" alt="缺页中断-LRU"></p>
 </li>
 <li><p>最近最不经常使用算法（NFU）</p>
 </li>
@@ -241,8 +244,22 @@
 </li>
 </ul>
 </li>
-<li><h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3></li>
-<li><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3></li>
+<li><h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>​</p>
+<p>​</p>
+</li>
+<li><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>死锁的四个必要条件：</p>
+<ol>
+<li><strong>互斥条件。</strong>每个资源要么已经分配给了一个进程，要么就是可用的</li>
+<li><strong>占有和等待条件。</strong>已经得到了某个资源的进程可以再请求新的资源</li>
+<li><strong>不可抢占条件。</strong>已经分配给一个进程的资源不能强制性地被抢占，它只能被占有它的进程显示地释放</li>
+<li><strong>环路等待条件。</strong>死锁发生时，系统中一定有由两个或两个以上的进程组成的一条环路，该环路中的每个进程都在等待着下一个进程所占有的资源</li>
+</ol>
+<p>死锁发生时，以上四个条件一定是同时满足的。如果有一个条件不成立，死锁就不会发生。</p>
+<h4 id="死锁检测和恢复"><a href="#死锁检测和恢复" class="headerlink" title="死锁检测和恢复"></a>死锁检测和恢复</h4><h4 id="死锁避免"><a href="#死锁避免" class="headerlink" title="死锁避免"></a>死锁避免</h4><p>​    银行家算法</p>
+<h4 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h4><p>​    破坏条件</p>
+</li>
+</ul>
+</li>
 </ul>
 
                 <hr>
@@ -254,14 +271,11 @@
                      data-title="操作系统复习"
                      data-url="/2017/02/28/操作系统复习/"
                      data-images=""
-                     data-content="操作系统复习
+                     data-content="
+操作系统复习
 线程与进程
 进程与线程的定义？区别？
-​
-
-进程间的通信IPC
-临界区
-共享内存... | Aus.Vic.Mel ">
+进程是操作系统内可独立调度和资源分配的基... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -305,7 +319,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#操作系统复习"><span class="toc-text">操作系统复习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线程与进程"><span class="toc-text">线程与进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储管理"><span class="toc-text">存储管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件系统"><span class="toc-text">文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁"><span class="toc-text">死锁</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#操作系统复习"><span class="toc-text">操作系统复习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程与进程"><span class="toc-text">线程与进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储管理"><span class="toc-text">存储管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件系统"><span class="toc-text">文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁"><span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁检测和恢复"><span class="toc-text">死锁检测和恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁避免"><span class="toc-text">死锁避免</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁预防"><span class="toc-text">死锁预防</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
