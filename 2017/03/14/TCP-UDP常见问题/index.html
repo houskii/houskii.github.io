@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        操作系统复习｜Aus.Vic.Mel
+        TCP/UDP常见问题｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2017/02/28/操作系统复习/">
+    <link rel="canonical" href="/2017/03/14/TCP-UDP常见问题/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,18 +148,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>操作系统复习</h1>
+                    <h1>TCP/UDP常见问题</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2017-02-28
+                          日期 2017-03-14
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#操作系统"
-                           title="操作系统">操作系统</a>
+                        <a class="tag" href="/tags/#计算机网络"
+                           title="计算机网络">计算机网络</a>
                         
                     </div>
                 </div>
@@ -168,7 +168,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            操作系统复习
+            TCP/UDP常见问题
         </span>
     </div>
 </header>
@@ -179,103 +179,64 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <ul>
-<li><h3 id="操作系统复习"><a href="#操作系统复习" class="headerlink" title="操作系统复习"></a>操作系统复习</h3><ul>
-<li><h3 id="线程与进程"><a href="#线程与进程" class="headerlink" title="线程与进程"></a>线程与进程</h3><ul>
-<li><p>进程与线程的定义？区别？</p>
-<p>进程是操作系统内可独立调度和资源分配的基本单位</p>
+                <h2 id="TCP-UDP常见问题"><a href="#TCP-UDP常见问题" class="headerlink" title="TCP/UDP常见问题"></a>TCP/UDP常见问题</h2><h3 id="TCP篇"><a href="#TCP篇" class="headerlink" title="TCP篇"></a>TCP篇</h3><ol>
+<li><h4 id="TCP的标志比特有哪几种？"><a href="#TCP的标志比特有哪几种？" class="headerlink" title="TCP的标志比特有哪几种？"></a>TCP的标志比特有哪几种？</h4><ul>
+<li>URG：紧急指针(urgent pointer)有效</li>
+<li>SYN：同步序号用来发起一个连接</li>
+<li>FIN：发送端完成发送人物</li>
+<li>ACK：确认序号有效</li>
+<li>RST：重建连接</li>
+<li>PSH：接收方应该尽快将这个报文段交给应用层</li>
+</ul>
 <p>​</p>
-<p>线程是进程的子集，一个进程由多个线程组成​</p>
 </li>
-<li><p>进程间的通信IPC</p>
-<p><strong>临界区</strong></p>
-<p>共享内存进行访问的程序片段称为临界区。避免两个进程同时处于临界区，就能避免竞争条件</p>
-<p><strong>忙等待的互斥</strong></p>
+<li><h4 id="TCP网络状态的转移？"><a href="#TCP网络状态的转移？" class="headerlink" title="TCP网络状态的转移？"></a>TCP网络状态的转移？</h4><p><img src="https://pic2.zhimg.com/v2-665b70b42f1959fc92c69f06ae083c89_b.png" alt="TCP状态机"></p>
+</li>
+<li><h4 id="存在四次握手-三次挥手么？"><a href="#存在四次握手-三次挥手么？" class="headerlink" title="存在四次握手/三次挥手么？"></a>存在四次握手/三次挥手么？</h4><p>存在</p>
+<p>四次握手的情况：</p>
+<p>当Client和Server同时主动打开与对方建立连接时。</p>
+<p>由于双方不知道对方会与自己建立连接，则两端会同时向对方发送<code>SYN</code>包，同时进入<code>SYN_SENT</code>状态，在收到对方发送的SYN包后进入<code>SYN_RCVD</code>状态并发送<code>ACK</code>包，由于之前自己已经发送了<code>SYN</code>包，所以现在只需要等待对方对自己<code>SYN</code>的回应<code>ACK</code>，并在收到回应时进入<code>ESTABLISHED</code>状态。</p>
+<p><img src="https://pic1.zhimg.com/v2-527710369020763de02429ca8e8dafc8_b.png" alt="四次握手"></p>
+<p>三次挥手的情况：</p>
+<p>当Server收到Client发送的FIN包时，自己回应<code>ACK</code>包时已经没有需要传输的数据，则Server会将<code>ACK</code>和<code>FIN</code>一次性发送给Client，并直接进入<code>LAST_ACK</code>状态。Client对Server发送的<code>FIN</code>包进行回应进入<code>TIME_WAIT</code>状态，Server收到Client的回应后进入<code>CLOSED</code>状态，断开连接。</p>
+<p>​</p>
+</li>
+<li><h4 id="SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？"><a href="#SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？" class="headerlink" title="SYN的初始化序列号ISN(Inital Sequence Number)是否可以固定？"></a><code>SYN</code>的初始化序列号ISN(Inital Sequence Number)是否可以固定？</h4><p>如果</p>
+<p>​</p>
+</li>
+<li><h4 id="三次握手时客户端没有ACK怎么办？"><a href="#三次握手时客户端没有ACK怎么办？" class="headerlink" title="三次握手时客户端没有ACK怎么办？"></a>三次握手时客户端没有<code>ACK</code>怎么办？</h4><p>当Client发送SYN给Server后断开了连接，Server收到并返回了SYN&amp;ACK，却一直没有收到Client返回的ACK，这时连接既没有建立也不算失败。因此需要一个重试时间来让Server决定是否放弃这个连接，否则就会一直占用Server的<code>SYN</code>连接队列直至耗尽。</p>
+<p>Linux中默认5次重发SYN&amp;ACK包，时间间隔是前一次的两倍，即为1s / 2s / 4s / 8s / 16s，加上第五次发送后等待的32s，即一共63s。</p>
+<blockquote>
+<p>由于Server需要63s才能断开这个连接，如果在63s内大量只发送SYN队列，也会引发问题（即SYN flood攻击）。linux提供了几个TCP参数：tcp_syncookies、tcp_synack_retries、tcp_max_syn_backlog、tcp_abort_on_overflow 来调整应对。</p>
+</blockquote>
+<p>​</p>
+</li>
+<li><h4 id="两端同时断开连接时网络是什么状态？"><a href="#两端同时断开连接时网络是什么状态？" class="headerlink" title="两端同时断开连接时网络是什么状态？"></a>两端同时断开连接时网络是什么状态？</h4><p>两端同时向对方发送<code>FIN</code>包后进入<code>FIN_WAIT_1</code>，在收到对方发来的<code>FIN</code>包后，向对方发送<code>ACK</code>包并进入<code>CLOSING</code>状态。由于对方已经发送了<code>FIN</code>包表示断开连接，因此没有数据包流入。在收到对方发送<u>对自己<code>FIN</code>包的<code>ACK</code>包</u>后，进入<code>TIME_WAIT</code>状态，等待2MSL后断开连接<img src="http://pic1.zhimg.com/v2-75c4329226ceacb5cea6a5b61e7b1734_b.png" alt="同时断开"></p>
+</li>
+<li><h4 id="哪一端会进入TIME-WAIT？TIME-WAIT有什么用？"><a href="#哪一端会进入TIME-WAIT？TIME-WAIT有什么用？" class="headerlink" title="哪一端会进入TIME_WAIT？TIME_WAIT有什么用？"></a>哪一端会进入<code>TIME_WAIT</code>？<code>TIME_WAIT</code>有什么用？</h4><p>发送<code>FIN</code>包的一段会进入<code>TIME_WAIT</code>状态，如果两方都发送了则都进入（如Q5）</p>
+<p><code>TIME_WAIT</code>是为了防止发送方在给对方的<code>FIN</code>包发送<code>ACK</code>后直接断开连接。如果这个<code>ACK</code>包在途中遗失，则接收方无法收到<code>ACK</code>包，同时因为链接已经断开，接收方要求发送方重新发送<code>ACK</code>包的<code>FIN</code>包请求也无法正确到达。如果这个端口恰好连入一个新的发送方，可能会发生一下两种情况：</p>
 <ol>
-<li>屏蔽中断</li>
-<li>锁变量</li>
-<li>严格轮换法</li>
-<li>生产消费者问题/有界缓冲区问题</li>
+<li>由于未建立连接时收到一个<code>FIN</code>包，违反了传输协议，新发送方会返回一个RST，接收方本应该正确关闭的连接却收到了一个错误。</li>
+<li>刚好建立了连接后收到一个<code>FIN</code>包，又恰好这个<code>FIN</code>包有一定概率符合这个连接的配置，使连接莫名其妙关闭。</li>
 </ol>
-<p><strong>信号量</strong></p>
-<p>​    设置2种操作UP和DOWN，设置一个变量类型为信号量。取值可以为0（表示没有保存下来的唤醒操作）或者正值（表示有一个及以上的唤醒操作）</p>
-<p>可以用信号量来处理生产者-消费者问题</p>
-<p><strong>互斥量</strong></p>
-<p>信号量的一个简化版本</p>
-<p><strong>管程（monitor）</strong></p>
-<p> 任何时刻中管程中只能有一个活跃进程，通过wait和siganl操作来对管程进行控制</p>
-<p>常见的如Java中的sychronized</p>
-<p><strong>消息传递</strong></p>
-<p>​</p>
-<p><strong>屏障</strong></p>
-<p>当一个进程到达屏障时，它就被屏障阻拦，直到所有进程都到达该屏障为止。</p>
+<p>同时对于客户端来说，如果端口（MAX = 65535）大量被占用，<code>TIME_WAIT</code>可以作为一个端口释放的缓冲时间</p>
 </li>
-<li><p>调度</p>
-<p>​</p>
-</li>
-</ul>
-</li>
-<li><h3 id="存储管理"><a href="#存储管理" class="headerlink" title="存储管理"></a>存储管理</h3><ul>
-<li><p>分页</p>
-</li>
-<li><p>页面置换算法</p>
-<ul>
-<li><p>最优页面置换算法（不可实现）</p>
-<p><img src="/images/缺页中断-OPT.png" alt="缺页中断-OPT"></p>
-</li>
-<li><p>最近未使用页面置换算法（NRU）</p>
-</li>
-<li><p>先进先出页面置换算法（FIFO）</p>
-<p><img src="/images/缺页中断-FIFO.png" alt="缺页中断-FIFO"></p>
-<p>注意：belady异常</p>
-<p><img src="/images/FIFO-Belady.png" alt="FIFO-Belady"></p>
-</li>
-<li><p>第二次机会页面置换算法</p>
-</li>
-<li><p>时钟页面置换算法</p>
-</li>
-<li><p>最近最少使用页面置换算法（LRU）</p>
-<p><img src="/images/缺页中断-LRU.png" alt="缺页中断-LRU"></p>
-</li>
-<li><p>最近最不经常使用算法（NFU）</p>
-</li>
-</ul>
-<p>​</p>
-</li>
-</ul>
-</li>
-<li><h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>​</p>
-<p>​</p>
-</li>
-<li><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>死锁的四个必要条件：</p>
-<ol>
-<li><strong>互斥条件。</strong>每个资源要么已经分配给了一个进程，要么就是可用的</li>
-<li><strong>占有和等待条件。</strong>已经得到了某个资源的进程可以再请求新的资源</li>
-<li><strong>不可抢占条件。</strong>已经分配给一个进程的资源不能强制性地被抢占，它只能被占有它的进程显示地释放</li>
-<li><strong>环路等待条件。</strong>死锁发生时，系统中一定有由两个或两个以上的进程组成的一条环路，该环路中的每个进程都在等待着下一个进程所占有的资源</li>
 </ol>
-<p>死锁发生时，以上四个条件一定是同时满足的。如果有一个条件不成立，死锁就不会发生。</p>
-<h4 id="死锁检测和恢复"><a href="#死锁检测和恢复" class="headerlink" title="死锁检测和恢复"></a>死锁检测和恢复</h4><h4 id="死锁避免"><a href="#死锁避免" class="headerlink" title="死锁避免"></a>死锁避免</h4><p>​    银行家算法</p>
-<h4 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h4><p>​    破坏条件</p>
-</li>
-</ul>
-</li>
-</ul>
+<h3 id="UDP篇"><a href="#UDP篇" class="headerlink" title="UDP篇"></a>UDP篇</h3><p>参考资料</p>
+<p><a href="https://zhuanlan.zhihu.com/p/25569676" target="_blank" rel="external">浅析TCP协议中的疑难杂症</a></p>
 
                 <hr>
                 
                 <!-- 多说 Share start -->
                 <div class="ds-share"
                      style="text-align: right"
-                     data-thread-key="2017/02/28/操作系统复习/"
-                     data-title="操作系统复习"
-                     data-url="/2017/02/28/操作系统复习/"
+                     data-thread-key="2017/03/14/TCP-UDP常见问题/"
+                     data-title="TCP/UDP常见问题"
+                     data-url="/2017/03/14/TCP-UDP常见问题/"
                      data-images=""
-                     data-content="
-操作系统复习
-线程与进程
-进程与线程的定义？区别？
-进程是操作系统内可独立调度和资源分配的基... | Aus.Vic.Mel ">
+                     data-content="TCP/UDP常见问题TCP篇
+TCP的标志比特有哪几种？
+URG：紧急指针(urgent p... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -293,15 +254,10 @@
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2017/03/14/TCP-UDP常见问题/" data-toggle="tooltip" data-placement="top"
-                           title="TCP/UDP常见问题">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2017/02/17/记最近配置环境时碰到的坑/" data-toggle="tooltip" data-placement="top"
-                           title="记最近配置环境时碰到的坑">Next Post &rarr;</a>
+                        <a href="/2017/02/28/操作系统复习/" data-toggle="tooltip" data-placement="top"
+                           title="操作系统复习">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -310,9 +266,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                         data-thread-key="2017/02/28/操作系统复习/"
-                         data-title="操作系统复习"
-                         data-url="/2017/02/28/操作系统复习/">
+                         data-thread-key="2017/03/14/TCP-UDP常见问题/"
+                         data-title="TCP/UDP常见问题"
+                         data-url="/2017/03/14/TCP-UDP常见问题/">
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -324,7 +280,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#操作系统复习"><span class="toc-text">操作系统复习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程与进程"><span class="toc-text">线程与进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储管理"><span class="toc-text">存储管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件系统"><span class="toc-text">文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁"><span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁检测和恢复"><span class="toc-text">死锁检测和恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁避免"><span class="toc-text">死锁避免</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁预防"><span class="toc-text">死锁预防</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-UDP常见问题"><span class="toc-text">TCP/UDP常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP篇"><span class="toc-text">TCP篇</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP的标志比特有哪几种？"><span class="toc-text">TCP的标志比特有哪几种？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP网络状态的转移？"><span class="toc-text">TCP网络状态的转移？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存在四次握手-三次挥手么？"><span class="toc-text">存在四次握手/三次挥手么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？"><span class="toc-text">SYN的初始化序列号ISN(Inital Sequence Number)是否可以固定？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三次握手时客户端没有ACK怎么办？"><span class="toc-text">三次握手时客户端没有ACK怎么办？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两端同时断开连接时网络是什么状态？"><span class="toc-text">两端同时断开连接时网络是什么状态？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#哪一端会进入TIME-WAIT？TIME-WAIT有什么用？"><span class="toc-text">哪一端会进入TIME_WAIT？TIME_WAIT有什么用？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP篇"><span class="toc-text">UDP篇</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -346,8 +302,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#操作系统"
-                           title="操作系统">操作系统</a>
+                        <a class="tag" href="/tags/#计算机网络"
+                           title="计算机网络">计算机网络</a>
                         
                     </div>
                 </section>
