@@ -79,13 +79,13 @@
                     
                         
                         <li>
-                            <a href="/tags/">Articles</a>
+                            <a href="/about/">about</a>
                         </li>
                         
                     
                         
                         <li>
-                            <a href="/about/">about</a>
+                            <a href="/tags/">Articles</a>
                         </li>
                         
                     
@@ -189,25 +189,31 @@
 <p>outputfile 输出结果到指定文件</p>
 <p>​</p>
 </li>
-<li><h4 id="查看APK的信息"><a href="#查看APK的信息" class="headerlink" title="查看APK的信息"></a>查看APK的信息</h4><p>aapt d(ump) (values) file.{apk} (asset (asset …)</p>
-<p>| 可选values       | 功能                                       |<br>| ————– | —————————————- |<br>| badging        | Print the label and icon for the app declared in APK |<br>| permissions    | Print the permissions from the APK.      |<br>| resources      | Print the resource table from the APK.   |<br>| configurations | Print the configurations in the APK.     |<br>| xmltree        | Print the compiled xmls in the given assets. |<br>| xmlstrings     | Print the strings of the given compiled xml assets. |</p>
+<li><h4 id="查看APK的信息"><a href="#查看APK的信息" class="headerlink" title="查看APK的信息"></a>查看APK的信息</h4><p><strong>aapt d(ump) (values) file.{apk} (asset (asset …)</strong></p>
+<p>badging          Print the label and icon for the app declared in APK<br>permissions      Print the permissions from the APK.<br>resources        Print the resource table from the APK.<br>configurations   Print the configurations in the APK.<br>xmltree          Print the compiled xmls in the given assets.<br>xmlstrings       Print the strings of the given compiled xml assets.</p>
 <p>​</p>
 </li>
-<li><p>编译Android资源</p>
-<p>aapt p(ackage) (-d)(-f)(-m)(-u)(-v)(-x)(-z)(-M AndroidManifest.xml) </p>
-<p>/ (-0 extension (-0 extension …)) (-g tolerance) (-j jarfile) </p>
-<p>/(–debug-mode)(–min-sdk-version VAL) (–target-sdk-version VAL) </p>
-<p>/(–app-versionVAL) (–app-version-name TEXT) (–custom-package VAL) </p>
-<p>/ (–rename-manifest-package PACKAGE) </p>
-<p>/ (–rename-instrumentation-target-package PACKAGE) </p>
-<p>/ (–utf16)(–auto-add-overlay) </p>
-<p>/  (–max-res-version VAL) </p>
-<p>/  (-I base-package (-I base-package …)) </p>
-<p>/  (-A asset-source-dir)  (-G class-list-file) (-P public-definitions-file) </p>
-<p>/  (-S resource-sources (-S resource-sources …)) (-F apk-file) (-J R-file-dir) </p>
-<p>/  (—product product1,product2,…) </p>
-<p>/  (raw-files-dir(raw-files-dir) …)</p>
-<p>| 指令   | 功能                     |<br>| —- | ———————- |<br>| -f   | 如果编译出来的文件已经存在，强制覆盖。    |<br>| -m   | 使生成的包的目录放在-J参数指定的目录。   |<br>| -J   | 指定生成的R.java的输出目录       |<br>| -S   | res文件夹路径               |<br>| -A   | assert文件夹的路径           |<br>| -M   | AndroidManifest.xml的路径 |<br>| -I   | 某个版本平台的android.jar的路径  |<br>| -F   | 具体指定apk文件的输出           |</p>
+<li><h4 id="编译Android资源"><a href="#编译Android资源" class="headerlink" title="编译Android资源"></a>编译Android资源</h4><p><strong>aapt p(ackage) (-d)(-f)(-m)(-u)(-v)(-x)(-z)(-M AndroidManifest.xml)</strong> </p>
+<p><strong>/ (-0 extension (-0 extension …)) (-g tolerance) (-j jarfile)</strong> </p>
+<p><strong>/ (–debug-mode)(–min-sdk-version VAL) (–target-sdk-version VAL)</strong> </p>
+<p><strong>/ (–app-versionVAL) (–app-version-name TEXT) (–custom-package VAL)</strong> </p>
+<p><strong>/ (–rename-manifest-package PACKAGE)</strong> </p>
+<p><strong>/ (–rename-instrumentation-target-package PACKAGE)</strong> </p>
+<p><strong>/ (–utf16)(–auto-add-overlay)</strong> </p>
+<p><strong>/  (–max-res-version VAL)</strong> </p>
+<p><strong>/  (-I base-package (-I base-package …))</strong> </p>
+<p><strong>/  (-A asset-source-dir)  (-G class-list-file) (-P public-definitions-file)</strong> </p>
+<p><strong>/  (-S resource-sources (-S resource-sources …)) (-F apk-file) (-J R-file-dir)</strong> </p>
+<p><strong>/  (—product product1,product2,…)</strong> </p>
+<p><strong>/  (raw-files-dir(raw-files-dir) …)</strong></p>
+<p>-f 如果编译出来的文件已经存在，强制覆盖。</p>
+<p>-m 使生成的包的目录放在-J参数指定的目录。</p>
+<p>-J 指定生成的R.<a href="http://lib.csdn.net/base/17" target="_blank" rel="external">Java</a>的输出目录</p>
+<p>-S res文件夹路径</p>
+<p>-A assert文件夹的路径</p>
+<p>-M AndroidManifest.xml的路径</p>
+<p>-I 某个版本平台的android.jar的路径</p>
+<p>-F 具体指定apk文件的输出</p>
 <p>​</p>
 </li>
 <li><h4 id="从APK中添加-移除文件"><a href="#从APK中添加-移除文件" class="headerlink" title="从APK中添加/移除文件"></a>从APK中添加/移除文件</h4><p><strong>aapt r(emove)(-v) file.{zip,jar,apk} file1 (file2 …)</strong></p>
@@ -271,7 +277,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AAPT使用指南"><span class="toc-text">AAPT使用指南</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出APK的内容"><span class="toc-text">列出APK的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看APK的信息"><span class="toc-text">查看APK的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从APK中添加-移除文件"><span class="toc-text">从APK中添加/移除文件</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AAPT使用指南"><span class="toc-text">AAPT使用指南</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出APK的内容"><span class="toc-text">列出APK的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看APK的信息"><span class="toc-text">查看APK的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编译Android资源"><span class="toc-text">编译Android资源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从APK中添加-移除文件"><span class="toc-text">从APK中添加/移除文件</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
