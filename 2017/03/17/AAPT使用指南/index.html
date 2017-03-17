@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        TCP/UDP常见问题｜Aus.Vic.Mel
+        AAPT使用指南｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2017/03/14/TCP-UDP常见问题/">
+    <link rel="canonical" href="/2017/03/17/AAPT使用指南/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,18 +148,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>TCP/UDP常见问题</h1>
+                    <h1>AAPT使用指南</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2017-03-14
+                          日期 2017-03-17
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#计算机网络"
-                           title="计算机网络">计算机网络</a>
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
                         
                     </div>
                 </div>
@@ -168,7 +168,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            TCP/UDP常见问题
+            AAPT使用指南
         </span>
     </div>
 </header>
@@ -179,64 +179,55 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="TCP-UDP常见问题"><a href="#TCP-UDP常见问题" class="headerlink" title="TCP/UDP常见问题"></a>TCP/UDP常见问题</h2><h3 id="TCP篇"><a href="#TCP篇" class="headerlink" title="TCP篇"></a>TCP篇</h3><ol>
-<li><h4 id="TCP的标志比特有哪几种？"><a href="#TCP的标志比特有哪几种？" class="headerlink" title="TCP的标志比特有哪几种？"></a>TCP的标志比特有哪几种？</h4><ul>
-<li>URG：紧急指针(urgent pointer)有效</li>
-<li>SYN：同步序号用来发起一个连接</li>
-<li>FIN：发送端完成发送人物</li>
-<li>ACK：确认序号有效</li>
-<li>RST：重建连接</li>
-<li>PSH：接收方应该尽快将这个报文段交给应用层</li>
-</ul>
-<p>​</p>
-</li>
-<li><h4 id="TCP网络状态的转移？"><a href="#TCP网络状态的转移？" class="headerlink" title="TCP网络状态的转移？"></a>TCP网络状态的转移？</h4><p><img src="https://pic2.zhimg.com/v2-665b70b42f1959fc92c69f06ae083c89_b.png" alt="TCP状态机"></p>
-</li>
-<li><h4 id="存在四次握手-三次挥手么？"><a href="#存在四次握手-三次挥手么？" class="headerlink" title="存在四次握手/三次挥手么？"></a>存在四次握手/三次挥手么？</h4><p>存在</p>
-<p>四次握手的情况：</p>
-<p>当Client和Server同时主动打开与对方建立连接时。</p>
-<p>由于双方不知道对方会与自己建立连接，则两端会同时向对方发送<code>SYN</code>包，同时进入<code>SYN_SENT</code>状态，在收到对方发送的SYN包后进入<code>SYN_RCVD</code>状态并发送<code>ACK</code>包，由于之前自己已经发送了<code>SYN</code>包，所以现在只需要等待对方对自己<code>SYN</code>的回应<code>ACK</code>，并在收到回应时进入<code>ESTABLISHED</code>状态。</p>
-<p><img src="https://pic1.zhimg.com/v2-527710369020763de02429ca8e8dafc8_b.png" alt="四次握手"></p>
-<p>三次挥手的情况：</p>
-<p>当Server收到Client发送的FIN包时，自己回应<code>ACK</code>包时已经没有需要传输的数据，则Server会将<code>ACK</code>和<code>FIN</code>一次性发送给Client，并直接进入<code>LAST_ACK</code>状态。Client对Server发送的<code>FIN</code>包进行回应进入<code>TIME_WAIT</code>状态，Server收到Client的回应后进入<code>CLOSED</code>状态，断开连接。</p>
-<p>​</p>
-</li>
-<li><h4 id="SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？"><a href="#SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？" class="headerlink" title="SYN的初始化序列号ISN(Inital Sequence Number)是否可以固定？"></a><code>SYN</code>的初始化序列号ISN(Inital Sequence Number)是否可以固定？</h4><p>如果</p>
-<p>​</p>
-</li>
-<li><h4 id="三次握手时客户端没有ACK怎么办？"><a href="#三次握手时客户端没有ACK怎么办？" class="headerlink" title="三次握手时客户端没有ACK怎么办？"></a>三次握手时客户端没有<code>ACK</code>怎么办？</h4><p>当Client发送SYN给Server后断开了连接，Server收到并返回了SYN&amp;ACK，却一直没有收到Client返回的ACK，这时连接既没有建立也不算失败。因此需要一个重试时间来让Server决定是否放弃这个连接，否则就会一直占用Server的<code>SYN</code>连接队列直至耗尽。</p>
-<p>Linux中默认5次重发SYN&amp;ACK包，时间间隔是前一次的两倍，即为1s / 2s / 4s / 8s / 16s，加上第五次发送后等待的32s，即一共63s。</p>
-<blockquote>
-<p>由于Server需要63s才能断开这个连接，如果在63s内大量只发送SYN队列，也会引发问题（即SYN flood攻击）。linux提供了几个TCP参数：tcp_syncookies、tcp_synack_retries、tcp_max_syn_backlog、tcp_abort_on_overflow 来调整应对。</p>
-</blockquote>
-<p>​</p>
-</li>
-<li><h4 id="两端同时断开连接时网络是什么状态？"><a href="#两端同时断开连接时网络是什么状态？" class="headerlink" title="两端同时断开连接时网络是什么状态？"></a>两端同时断开连接时网络是什么状态？</h4><p>两端同时向对方发送<code>FIN</code>包后进入<code>FIN_WAIT_1</code>，在收到对方发来的<code>FIN</code>包后，向对方发送<code>ACK</code>包并进入<code>CLOSING</code>状态。由于对方已经发送了<code>FIN</code>包表示断开连接，因此没有数据包流入。在收到对方发送<u>对自己<code>FIN</code>包的<code>ACK</code>包</u>后，进入<code>TIME_WAIT</code>状态，等待2MSL后断开连接<img src="http://pic1.zhimg.com/v2-75c4329226ceacb5cea6a5b61e7b1734_b.png" alt="同时断开"></p>
-</li>
-<li><h4 id="哪一端会进入TIME-WAIT？TIME-WAIT有什么用？"><a href="#哪一端会进入TIME-WAIT？TIME-WAIT有什么用？" class="headerlink" title="哪一端会进入TIME_WAIT？TIME_WAIT有什么用？"></a>哪一端会进入<code>TIME_WAIT</code>？<code>TIME_WAIT</code>有什么用？</h4><p>发送<code>FIN</code>包的一段会进入<code>TIME_WAIT</code>状态，如果两方都发送了则都进入（如Q5）</p>
-<p><code>TIME_WAIT</code>是为了防止发送方在给对方的<code>FIN</code>包发送<code>ACK</code>后直接断开连接。如果这个<code>ACK</code>包在途中遗失，则接收方无法收到<code>ACK</code>包，同时因为链接已经断开，接收方要求发送方重新发送<code>ACK</code>包的<code>FIN</code>包请求也无法正确到达。如果这个端口恰好连入一个新的发送方，可能会发生一下两种情况：</p>
+                <h2 id="AAPT使用指南"><a href="#AAPT使用指南" class="headerlink" title="AAPT使用指南"></a>AAPT使用指南</h2><p>aapt即Android Asset Packaging Tool，我们可以在SDK的platform-tools目录下找到该工具。aapt可以查看、 创建、 更新ZIP格式的文档附件(zip, jar, apk)。 也可将资源文件编译成二进制文件，尽管你可能没有直接使用过aapt工具，但是build scripts和IDE插件会使用这个工具打包apk文件构成一个Android 应用程序。</p>
+<p>常见的使用方式有下面这几种。</p>
 <ol>
-<li>由于未建立连接时收到一个<code>FIN</code>包，违反了传输协议，新发送方会返回一个RST，接收方本应该正确关闭的连接却收到了一个错误。</li>
-<li>刚好建立了连接后收到一个<code>FIN</code>包，又恰好这个<code>FIN</code>包有一定概率符合这个连接的配置，使连接莫名其妙关闭。</li>
-</ol>
-<p>同时对于客户端来说，如果端口（MAX = 65535）大量被占用，<code>TIME_WAIT</code>可以作为一个端口释放的缓冲时间</p>
+<li><h4 id="列出APK的内容"><a href="#列出APK的内容" class="headerlink" title="列出APK的内容"></a>列出APK的内容</h4><p><strong>aapt l(ist) (-v) (-a)  file.{zip,jar,apk}（&gt; {outputfile}）</strong></p>
+<p>l表示列出所有文件</p>
+<p>-v 以表格形式文件具体信息</p>
+<p>-a 详细列出内容</p>
+<p>outputfile 输出结果到指定文件</p>
+<p>​</p>
+</li>
+<li><h4 id="查看APK的信息"><a href="#查看APK的信息" class="headerlink" title="查看APK的信息"></a>查看APK的信息</h4><p>aapt d(ump) (values) file.{apk} (asset (asset …)</p>
+<p>| 可选values       | 功能                                       |<br>| ————– | —————————————- |<br>| badging        | Print the label and icon for the app declared in APK |<br>| permissions    | Print the permissions from the APK.      |<br>| resources      | Print the resource table from the APK.   |<br>| configurations | Print the configurations in the APK.     |<br>| xmltree        | Print the compiled xmls in the given assets. |<br>| xmlstrings     | Print the strings of the given compiled xml assets. |</p>
+<p>​</p>
+</li>
+<li><p>编译Android资源</p>
+<p>aapt p(ackage) (-d)(-f)(-m)(-u)(-v)(-x)(-z)(-M AndroidManifest.xml) </p>
+<p>/ (-0 extension (-0 extension …)) (-g tolerance) (-j jarfile) </p>
+<p>/(–debug-mode)(–min-sdk-version VAL) (–target-sdk-version VAL) </p>
+<p>/(–app-versionVAL) (–app-version-name TEXT) (–custom-package VAL) </p>
+<p>/ (–rename-manifest-package PACKAGE) </p>
+<p>/ (–rename-instrumentation-target-package PACKAGE) </p>
+<p>/ (–utf16)(–auto-add-overlay) </p>
+<p>/  (–max-res-version VAL) </p>
+<p>/  (-I base-package (-I base-package …)) </p>
+<p>/  (-A asset-source-dir)  (-G class-list-file) (-P public-definitions-file) </p>
+<p>/  (-S resource-sources (-S resource-sources …)) (-F apk-file) (-J R-file-dir) </p>
+<p>/  (—product product1,product2,…) </p>
+<p>/  (raw-files-dir(raw-files-dir) …)</p>
+<p>| 指令   | 功能                     |<br>| —- | ———————- |<br>| -f   | 如果编译出来的文件已经存在，强制覆盖。    |<br>| -m   | 使生成的包的目录放在-J参数指定的目录。   |<br>| -J   | 指定生成的R.java的输出目录       |<br>| -S   | res文件夹路径               |<br>| -A   | assert文件夹的路径           |<br>| -M   | AndroidManifest.xml的路径 |<br>| -I   | 某个版本平台的android.jar的路径  |<br>| -F   | 具体指定apk文件的输出           |</p>
+<p>​</p>
+</li>
+<li><h4 id="从APK中添加-移除文件"><a href="#从APK中添加-移除文件" class="headerlink" title="从APK中添加/移除文件"></a>从APK中添加/移除文件</h4><p><strong>aapt r(emove)(-v) file.{zip,jar,apk} file1 (file2 …)</strong></p>
+<p><strong>aapt a(dd)(-v) file.{zip,jar,apk} file1 (file2 …)</strong></p>
+<blockquote>
+<p>往APK里添加/移除文件需要对APK进行重签名和对齐</p>
+</blockquote>
 </li>
 </ol>
-<h3 id="UDP篇"><a href="#UDP篇" class="headerlink" title="UDP篇"></a>UDP篇</h3><p>参考资料</p>
-<p><a href="https://zhuanlan.zhihu.com/p/25569676" target="_blank" rel="external">浅析TCP协议中的疑难杂症</a></p>
 
                 <hr>
                 
                 <!-- 多说 Share start -->
                 <div class="ds-share"
                      style="text-align: right"
-                     data-thread-key="2017/03/14/TCP-UDP常见问题/"
-                     data-title="TCP/UDP常见问题"
-                     data-url="/2017/03/14/TCP-UDP常见问题/"
+                     data-thread-key="2017/03/17/AAPT使用指南/"
+                     data-title="AAPT使用指南"
+                     data-url="/2017/03/17/AAPT使用指南/"
                      data-images=""
-                     data-content="TCP/UDP常见问题TCP篇
-TCP的标志比特有哪几种？
-URG：紧急指针(urgent p... | Aus.Vic.Mel ">
+                     data-content="AAPT使用指南aapt即Android Asset Packaging Tool，我们可以在... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -254,15 +245,10 @@ URG：紧急指针(urgent p... | Aus.Vic.Mel ">
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2017/03/17/AAPT使用指南/" data-toggle="tooltip" data-placement="top"
-                           title="AAPT使用指南">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2017/02/28/操作系统复习/" data-toggle="tooltip" data-placement="top"
-                           title="操作系统复习">Next Post &rarr;</a>
+                        <a href="/2017/03/14/TCP-UDP常见问题/" data-toggle="tooltip" data-placement="top"
+                           title="TCP/UDP常见问题">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -271,9 +257,9 @@ URG：紧急指针(urgent p... | Aus.Vic.Mel ">
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                         data-thread-key="2017/03/14/TCP-UDP常见问题/"
-                         data-title="TCP/UDP常见问题"
-                         data-url="/2017/03/14/TCP-UDP常见问题/">
+                         data-thread-key="2017/03/17/AAPT使用指南/"
+                         data-title="AAPT使用指南"
+                         data-url="/2017/03/17/AAPT使用指南/">
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -285,7 +271,7 @@ URG：紧急指针(urgent p... | Aus.Vic.Mel ">
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-UDP常见问题"><span class="toc-text">TCP/UDP常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP篇"><span class="toc-text">TCP篇</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP的标志比特有哪几种？"><span class="toc-text">TCP的标志比特有哪几种？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP网络状态的转移？"><span class="toc-text">TCP网络状态的转移？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存在四次握手-三次挥手么？"><span class="toc-text">存在四次握手/三次挥手么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SYN的初始化序列号ISN-Inital-Sequence-Number-是否可以固定？"><span class="toc-text">SYN的初始化序列号ISN(Inital Sequence Number)是否可以固定？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三次握手时客户端没有ACK怎么办？"><span class="toc-text">三次握手时客户端没有ACK怎么办？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两端同时断开连接时网络是什么状态？"><span class="toc-text">两端同时断开连接时网络是什么状态？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#哪一端会进入TIME-WAIT？TIME-WAIT有什么用？"><span class="toc-text">哪一端会进入TIME_WAIT？TIME_WAIT有什么用？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP篇"><span class="toc-text">UDP篇</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AAPT使用指南"><span class="toc-text">AAPT使用指南</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出APK的内容"><span class="toc-text">列出APK的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看APK的信息"><span class="toc-text">查看APK的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从APK中添加-移除文件"><span class="toc-text">从APK中添加/移除文件</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -307,8 +293,8 @@ URG：紧急指针(urgent p... | Aus.Vic.Mel ">
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#计算机网络"
-                           title="计算机网络">计算机网络</a>
+                        <a class="tag" href="/tags/#Android"
+                           title="Android">Android</a>
                         
                     </div>
                 </section>
