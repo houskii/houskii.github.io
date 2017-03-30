@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        AAPT使用指南｜Aus.Vic.Mel
+        热修复框架研究之Robust原理｜Aus.Vic.Mel
         
     </title>
 
-    <link rel="canonical" href="/2017/03/17/AAPT使用指南/">
+    <link rel="canonical" href="/2017/03/30/热修复框架研究之Robust原理/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -148,18 +148,24 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>AAPT使用指南</h1>
+                    <h1>热修复框架研究之Robust原理</h1>
                     
                     <span class="meta">
                          作者 Houskii
                         <span>
-                          日期 2017-03-17
+                          日期 2017-03-30
                          </span>
                     </span>
                     <div class="tags text-center">
                         
                         <a class="tag" href="/tags/#Android"
                            title="Android">Android</a>
+                        
+                        <a class="tag" href="/tags/#框架"
+                           title="框架">框架</a>
+                        
+                        <a class="tag" href="/tags/#源码研究"
+                           title="源码研究">源码研究</a>
                         
                     </div>
                 </div>
@@ -168,7 +174,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            AAPT使用指南
+            热修复框架研究之Robust原理
         </span>
     </div>
 </header>
@@ -179,61 +185,88 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="AAPT使用指南"><a href="#AAPT使用指南" class="headerlink" title="AAPT使用指南"></a>AAPT使用指南</h2><p>aapt即Android Asset Packaging Tool，我们可以在SDK的platform-tools目录下找到该工具。aapt可以查看、 创建、 更新ZIP格式的文档附件(zip, jar, apk)。 也可将资源文件编译成二进制文件，尽管你可能没有直接使用过aapt工具，但是build scripts和IDE插件会使用这个工具打包apk文件构成一个Android 应用程序。</p>
-<p>常见的使用方式有下面这几种。</p>
+                <h2 id="热修复框架研究之Robust原理"><a href="#热修复框架研究之Robust原理" class="headerlink" title="热修复框架研究之Robust原理"></a>热修复框架研究之Robust原理</h2><p>作者：Houskii</p>
+<p>Robust是美团点评团队在2017年3月开源的热修复框架，和阿里的AndFix不同，Robust不用依赖JNI层，直接通过Java层代码就可以实现热修复。相比于其他热修复框架，官方给出Robust的优势有以下几点</p>
 <ol>
-<li><h4 id="列出APK的内容"><a href="#列出APK的内容" class="headerlink" title="列出APK的内容"></a>列出APK的内容</h4><p><strong>aapt l(ist) (-v) (-a)  file.{zip,jar,apk}（&gt; {outputfile}）</strong></p>
-<p>l表示列出所有文件</p>
-<p>-v 以表格形式文件具体信息</p>
-<p>-a 详细列出内容</p>
-<p>outputfile 输出结果到指定文件</p>
-<p>​</p>
-</li>
-<li><h4 id="查看APK的信息"><a href="#查看APK的信息" class="headerlink" title="查看APK的信息"></a>查看APK的信息</h4><p><strong>aapt d(ump) (values) file.{apk} (asset (asset …)</strong></p>
-<p>badging          Print the label and icon for the app declared in APK<br>permissions      Print the permissions from the APK.<br>resources        Print the resource table from the APK.<br>configurations   Print the configurations in the APK.<br>xmltree          Print the compiled xmls in the given assets.<br>xmlstrings       Print the strings of the given compiled xml assets.</p>
-<p>​</p>
-</li>
-<li><h4 id="编译Android资源"><a href="#编译Android资源" class="headerlink" title="编译Android资源"></a>编译Android资源</h4><p><strong>aapt p(ackage) (-d)(-f)(-m)(-u)(-v)(-x)(-z)(-M AndroidManifest.xml)</strong> </p>
-<p><strong>/ (-0 extension (-0 extension …)) (-g tolerance) (-j jarfile)</strong> </p>
-<p><strong>/ (–debug-mode)(–min-sdk-version VAL) (–target-sdk-version VAL)</strong> </p>
-<p><strong>/ (–app-versionVAL) (–app-version-name TEXT) (–custom-package VAL)</strong> </p>
-<p><strong>/ (–rename-manifest-package PACKAGE)</strong> </p>
-<p><strong>/ (–rename-instrumentation-target-package PACKAGE)</strong> </p>
-<p><strong>/ (–utf16)(–auto-add-overlay)</strong> </p>
-<p><strong>/  (–max-res-version VAL)</strong> </p>
-<p><strong>/  (-I base-package (-I base-package …))</strong> </p>
-<p><strong>/  (-A asset-source-dir)  (-G class-list-file) (-P public-definitions-file)</strong> </p>
-<p><strong>/  (-S resource-sources (-S resource-sources …)) (-F apk-file) (-J R-file-dir)</strong> </p>
-<p><strong>/  (—product product1,product2,…)</strong> </p>
-<p><strong>/  (raw-files-dir(raw-files-dir) …)</strong></p>
-<p>-f 如果编译出来的文件已经存在，强制覆盖。</p>
-<p>-m 使生成的包的目录放在-J参数指定的目录。</p>
-<p>-J 指定生成的R.<a href="http://lib.csdn.net/base/17" target="_blank" rel="external">Java</a>的输出目录</p>
-<p>-S res文件夹路径</p>
-<p>-A assert文件夹的路径</p>
-<p>-M AndroidManifest.xml的路径</p>
-<p>-I 某个版本平台的android.jar的路径</p>
-<p>-F 具体指定apk文件的输出</p>
-<p>​</p>
-</li>
-<li><h4 id="从APK中添加-移除文件"><a href="#从APK中添加-移除文件" class="headerlink" title="从APK中添加/移除文件"></a>从APK中添加/移除文件</h4><p><strong>aapt r(emove)(-v) file.{zip,jar,apk} file1 (file2 …)</strong></p>
-<p><strong>aapt a(dd)(-v) file.{zip,jar,apk} file1 (file2 …)</strong></p>
-<blockquote>
-<p>往APK里添加/移除文件需要对APK进行重签名和对齐</p>
-</blockquote>
+<li>支持Android2.3-7.X版本</li>
+<li>高兼容性、高稳定性，修复成功率高达三个九</li>
+<li>补丁下发立即生效，不需要重新启动</li>
+<li>支持方法级别的修复，包括静态方法</li>
+<li>支持增加方法和类</li>
+<li>支持ProGuard的混淆、内联、优化等操作</li>
+</ol>
+<p>不接触JNI层，Robust是如何添加方法与类、立即生效其补丁的呢？</p>
+<p>Robust一共分为四个模块，分别为：</p>
+<ul>
+<li>autopatchbase（热补丁基类）</li>
+<li>gradle-plugin（负责apk包的插桩）</li>
+<li>auto-patch-plugin（负责提取制作patch包）</li>
+<li>patch（负责补丁包的补丁工作）</li>
+</ul>
+<p>我们一个一个来分析</p>
+<h3 id="AutoPatchBase"><a href="#AutoPatchBase" class="headerlink" title="AutoPatchBase"></a>AutoPatchBase</h3><p>作为热补丁的基类，主要类是有几个：</p>
+<p>2个注解分别为<code>@Add</code>（添加新的类）和<code>@Modify</code>（修改当前类的方法）；</p>
+<p>一个<code>Constant</code>类用来保存固定的字符串；</p>
+<p>一个<code>ChangeQuickRedirect</code>接口，用来给plugin确认当前类是否需要patch</p>
+<h3 id="Gradle-Plugin"><a href="#Gradle-Plugin" class="headerlink" title="Gradle-Plugin"></a>Gradle-Plugin</h3><p>用于插桩的工具。首先进行对Apk检查防止包被篡改，然后在<code>RobustTransform.groovy</code>中</p>
+<ol>
+<li>执行<code>apply(...)</code>方法，读取项目目录下的<code>robust.xml</code>加载热补丁的配置</li>
+<li>进入<code>transform(...)</code>方法，依次读取<code>bootClasspath</code>下的所有class文件并加入<code>ClassPool</code>中</li>
+<li>进入<code>insertRobustCode</code>方法，然后做了以下几件微小的工作：<ol>
+<li>将class设置为public</li>
+<li>当class为接口/无方法类时，执行5</li>
+<li>给class插入一个public static的<code>ChangeQuickRedirect</code>对象</li>
+<li>对所有方法使用Javassist插入代码：当该方法的<code>changeQuickRedirect</code>不为空时，直接将参数直接传入<code>PatchProxy</code>的<code>accessDispatchVoid</code>/<code>accessDispatch</code>方法并返回，<strong>这样做跳过了原方法后面的代码，从而实现了方法的替换</strong></li>
+<li>写入原来的class文件中</li>
+<li>打包压缩生成apk</li>
+</ol>
 </li>
 </ol>
+<p>由此，就实现了插桩的工作</p>
+<h3 id="Auto-Patch-Plugin"><a href="#Auto-Patch-Plugin" class="headerlink" title="Auto-Patch-Plugin"></a>Auto-Patch-Plugin</h3><p>制作patch包的工具。主要逻辑在<code>AutoPatchTransform.groovy</code>中，</p>
+<ol>
+<li>执行<code>apply(…)</code>方法，初始化参数</li>
+<li>跳到<code>transform(…)</code>中，又做了细微的工作<ol>
+<li>复制项目中的<code>LIB_NAME_ARRAY</code>中的3个jar包到<code>./robust/</code>文件夹下(unknown why)</li>
+<li>读取<code>bootClasspath</code>路径下的class文件并转换为<code>CtClass</code>对象数组</li>
+<li>执行打包<code>autoPatch(…)</code><ol>
+<li>首先执行<code>ReadAnnonation(…)</code>去读取<code>CtClass</code>数组中的注解，然后把注解的方法/类放在<code>Config</code>中保存</li>
+<li>执行<code>ReadMapping.initMappingInfo()</code>，读取mapping.txt将被ProGuard混淆了的类的对象还原成原来的类</li>
+<li>通过<code>InlineClassFactory</code>构造新加的类</li>
+<li>处理<code>super</code>的方法调用</li>
+<li>针对每一个有补丁方法的类，使用<code>PatchesFactory.createPatch</code>构造出<code>Patch</code>实现类</li>
+<li>使用<code>PatchesControlFactory.createPatchesControl</code>构造<code>PatchControl</code>类</li>
+<li>使用<code>PatchesInfoFactory.createPatchesInfo</code>构造<code>PatchInfo</code>类</li>
+<li>重新打包，优化smali</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="Patch"><a href="#Patch" class="headerlink" title="Patch"></a>Patch</h3><p>在activity中，通过执行以下代码运行了补丁</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">new PatchExecutor(getApplicationContext(), new PatchManipulateImp(),  new Callback()).start();</div></pre></td></tr></table></figure>
+<p><code>PatchExecutor</code>是一个<code>Thread</code>的子类，通过<code>PatchManipulateImp</code>指定的路径去读<code>patch</code>文件，然后给<code>DexClassLoader</code>加载并读取<code>PatchInfo</code>，然后通过<code>PatchInfo</code>中的信息获得需要补丁的类，通过反射修改其<code>changeQuickRedirect</code>对象的值，做到修改函数运行的路径</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>用一张图来总结robust原理</p>
+<p><img src="/images/robust.png" alt="robust"></p>
+<p>当然原理看起来简单，其中还是有很多难点在其中，例如</p>
+<ul>
+<li>如何解决patch中涉及到的包访问权限</li>
+<li>如何解决super的问题</li>
+<li>…</li>
+</ul>
+<p>各位对具体实现有兴趣的，可以通过解压官方demo中的补丁包，用JD-GUI来看看patch包中各种<code>patchInfo</code>、<code>patchControl</code>是如何处理的</p>
 
                 <hr>
                 
                 <!-- 多说 Share start -->
                 <div class="ds-share"
                      style="text-align: right"
-                     data-thread-key="2017/03/17/AAPT使用指南/"
-                     data-title="AAPT使用指南"
-                     data-url="/2017/03/17/AAPT使用指南/"
+                     data-thread-key="2017/03/30/热修复框架研究之Robust原理/"
+                     data-title="热修复框架研究之Robust原理"
+                     data-url="/2017/03/30/热修复框架研究之Robust原理/"
                      data-images=""
-                     data-content="AAPT使用指南aapt即Android Asset Packaging Tool，我们可以在... | Aus.Vic.Mel ">
+                     data-content="热修复框架研究之Robust原理作者：Houskii
+Robust是美团点评团队在2017年3... | Aus.Vic.Mel ">
                     <div class="ds-share-inline">
                         <ul class="ds-share-icons-16">
                             <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -252,14 +285,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/03/30/热修复框架研究之Robust原理/" data-toggle="tooltip" data-placement="top"
-                           title="热修复框架研究之Robust原理">&larr; Previous Post</a>
+                        <a href="/2017/03/30/热修复框架研究之AndFix原理/" data-toggle="tooltip" data-placement="top"
+                           title="热修复框架研究之AndFix原理">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2017/03/14/TCP-UDP常见问题/" data-toggle="tooltip" data-placement="top"
-                           title="TCP/UDP常见问题">Next Post &rarr;</a>
+                        <a href="/2017/03/17/AAPT使用指南/" data-toggle="tooltip" data-placement="top"
+                           title="AAPT使用指南">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -268,9 +301,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                         data-thread-key="2017/03/17/AAPT使用指南/"
-                         data-title="AAPT使用指南"
-                         data-url="/2017/03/17/AAPT使用指南/">
+                         data-thread-key="2017/03/30/热修复框架研究之Robust原理/"
+                         data-title="热修复框架研究之Robust原理"
+                         data-url="/2017/03/30/热修复框架研究之Robust原理/">
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -282,7 +315,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AAPT使用指南"><span class="toc-text">AAPT使用指南</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出APK的内容"><span class="toc-text">列出APK的内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看APK的信息"><span class="toc-text">查看APK的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编译Android资源"><span class="toc-text">编译Android资源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从APK中添加-移除文件"><span class="toc-text">从APK中添加/移除文件</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#热修复框架研究之Robust原理"><span class="toc-text">热修复框架研究之Robust原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AutoPatchBase"><span class="toc-text">AutoPatchBase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gradle-Plugin"><span class="toc-text">Gradle-Plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Auto-Patch-Plugin"><span class="toc-text">Auto-Patch-Plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Patch"><span class="toc-text">Patch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -306,6 +339,12 @@
                         
                         <a class="tag" href="/tags/#Android"
                            title="Android">Android</a>
+                        
+                        <a class="tag" href="/tags/#框架"
+                           title="框架">框架</a>
+                        
+                        <a class="tag" href="/tags/#源码研究"
+                           title="源码研究">源码研究</a>
                         
                     </div>
                 </section>
